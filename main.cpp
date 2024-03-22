@@ -20,7 +20,6 @@ public:
         for (int i = 0; i < nrLocuri; i++)
             locuriOcupate[i] = false;
     }
-
     Sala() {
         this->id = 0;
         this->nrLocuri = 0;
@@ -28,15 +27,9 @@ public:
         this->nrColoane = 0;
         locuriOcupate = nullptr;
     }
-
     ~Sala() {
-        id = 0;
-        nrLocuri = 0;
-        nrRanduri = 0;
-        nrColoane = 0;
-        if (locuriOcupate != nullptr)
-            delete[] locuriOcupate;
-//        locuriOcupate = nullptr;
+        delete[] locuriOcupate;
+        locuriOcupate = nullptr;
     }
     Sala(const Sala& other) {
         id = other.id;
@@ -62,106 +55,23 @@ public:
         }
         return *this;
     }
-//    Sala& operator=(const Sala& other) {
-//        if (this != &other) {
-//            bool* newLocuriOcupate = new bool[other.nrLocuri];
-//            for (int i = 0; i < other.nrLocuri; i++) {
-//                newLocuriOcupate[i] = other.locuriOcupate[i];
-//            }
-//            delete[] locuriOcupate;
-//            locuriOcupate = newLocuriOcupate;
-//            id = other.id;
-//            nrLocuri = other.nrLocuri;
-//            nrRanduri = other.nrRanduri;
-//            nrColoane = other.nrColoane;
-//        }
-//        return *this;
-//    }
-
     void setIdSala(int id) {
         this->id = id;
     }
-
-    void setLocuriOcupate(int nrLocuri, bool *locuriOcupate) {
+    void setLocuriOcupate(int nrLocuri, const bool *locuriOcupate) {
+        this->nrLocuri = nrLocuri;
         delete[] this->locuriOcupate;
         this->locuriOcupate = new bool[nrLocuri];
         for (int i = 0; i < nrLocuri; i++) {
             this->locuriOcupate[i] = locuriOcupate[i];
         }
     }
-    int getIdSala() {
+    [[nodiscard]] int getIdSala() const {
         return id;
     }
-    bool* getLocuriOcupate() {
+    [[nodiscard]] bool* getLocuriOcupate() const{
         return locuriOcupate;
     }
-};
-
-class Cinema{
-private:
-    int id;
-    std::string nume_mall;
-    Sala *saliCinema;
-    int nrSali;
-public:
-    Cinema(int id, std::string nume_mall) {
-        this->id = id;
-        this->nume_mall = nume_mall;
-        this->nrSali = 0;
-        this->saliCinema = nullptr;
-    }
-    Cinema() {
-        this->id = 0;
-        this->nrSali = 0;
-        this->nume_mall = "\0";
-        this->saliCinema = nullptr;
-    }
-    ~Cinema() {
-        id = 0;
-    }
-    void setId(int id){
-        this->id = id;
-    }
-    void setNumeMall(std::string nume_mall){
-        this->nume_mall = nume_mall;
-    }
-    int getId() {
-        return id;
-    }
-    std::string getNumeMall() {
-        return nume_mall;
-    }
-    Cinema& operator=(const Cinema &aux) {
-        if (this == &aux) {
-            return *this;
-        }
-        this->id = aux.id;
-        this->nume_mall = aux.nume_mall;
-        return *this;
-    }
-    bool operator==(Cinema &aux) {
-        if(this->id == aux.id and this->nume_mall == aux.nume_mall)
-            return true;
-        else
-            return false;
-    }
-    friend std::istream& operator>>(std::istream& in, Cinema& cinema) {
-        std::cout << "id: ";
-        in >> cinema.id;
-        std::cout << "nume mall: ";
-        in >> cinema.nume_mall;
-        return in;
-    }
-    friend std::ostream& operator<<(std::ostream& out, const Cinema& cinema) {
-        out << "id: " << cinema.id;
-        out << "nume mall: " << cinema.nume_mall;
-        return out;
-    }
-//    Cinema& operator+(Cinema& cinema) {
-//        Cinema *aux = new Cinema(cinema);
-//        aux->setId(cinema.getId());
-//        return *aux;
-//    }
 };
 
 class Film {
@@ -175,16 +85,16 @@ public:
     }
     Film() {
         this->id = 0;
-        this->nume_film = "\0";
+        this->nume_film = '\0';
     }
     ~Film() = default;
     void setNumeFilm(std::string nume_film){
         this->nume_film = nume_film;
     }
-    std::string getNumeFilm() {
+    [[nodiscard]] std::string getNumeFilm() const{
         return nume_film;
     }
-    int getId() {
+    [[nodiscard]] int getId() const {
         return id;
     }
     Film& operator=(const Film &aux) {
@@ -197,116 +107,180 @@ public:
     }
 };
 
+class Cinema{
+private:
+    int id;
+    std::string numeMall;
+    Film *filmeDifuzate;
+    int nrFilme;
+public:
+    Cinema(int id, std::string numeMall) {
+        this->id = id;
+        this->numeMall = numeMall;
+        this->nrFilme = 0;
+        this->filmeDifuzate = nullptr;
+    }
+    Cinema() {
+        this->id = 0;
+        this->nrFilme = 0;
+        this->numeMall = '\0';
+        this->filmeDifuzate = nullptr;
+    }
+    ~Cinema() {
+        delete[] this->filmeDifuzate;
+    }
+    void setId(int id){
+        this->id = id;
+    }
+    void setNumeMall(std::string numeMall) {
+        this->numeMall = numeMall;
+    }
+    void setNrFilme(int nrFilme) {
+        this->nrFilme = nrFilme;
+    }
+    void setFilmeDifuzate(int nrFilme, Film *filmeDifuzate) {
+        this->nrFilme = nrFilme;
+        delete[] this->filmeDifuzate;
+        this->filmeDifuzate = new Film[nrFilme];
+        for (int i = 0; i < nrFilme; i++) {
+            this->filmeDifuzate[i] = filmeDifuzate[i];
+        }
+    }
+    [[nodiscard]] int getId() const {
+        return id;
+    }
+    [[nodiscard]] std::string getNumeMall() const {
+        return numeMall;
+    }
+    [[nodiscard]] int getNrFilme() const {
+        return nrFilme;
+    }
+    [[nodiscard]] Film* getFilmeDifuzate() const{
+        return filmeDifuzate;
+    }
+    Cinema(Cinema& aux) {
+        id = aux.id;
+        numeMall = aux.numeMall;
+        nrFilme = aux.nrFilme;
+        filmeDifuzate = new Film[aux.nrFilme];
+        for (int i = 0; i < aux.nrFilme; i++)
+            filmeDifuzate[i] = aux.filmeDifuzate[i];
+    }
+    Cinema& operator=(const Cinema &aux) {
+        if (this == &aux) {
+            return *this;
+        }
+        this->id = aux.id;
+        this->numeMall = aux.numeMall;
+        this->nrFilme= aux.nrFilme;
+        delete[] filmeDifuzate;
+        this->filmeDifuzate = new Film[nrFilme];
+        for (int i = 0; i < aux.nrFilme; i++)
+            filmeDifuzate[i] = aux.filmeDifuzate[i];
+        return *this;
+    }
+//    bool operator==(Cinema &aux) {
+//        if(this->id == aux.id and this->numeMall == aux.numeMall)
+//            return true;
+//        else
+//            return false;
+//    }
+    friend std::istream& operator>>(std::istream& in, Cinema& cinema) {
+        std::cout << "id: ";
+        in >> cinema.id;
+        std::cout << "nume mall: ";
+        in >> cinema.numeMall;
+        std::cout<< "numar sali: ";
+        in >> cinema.nrFilme;
+        return in;
+    }
+    friend std::ostream& operator<<(std::ostream& out, const Cinema& cinema) {
+        out << "id: " << cinema.id;
+        out << "nume mall: " << cinema.numeMall;
+        out << "numar sali: " << cinema.nrFilme;
+        return out;
+    }
+};
+
 class Zi {
 private:
     std::string zi;
 public:
     Zi() {
-        this->zi = "\0";
+        this->zi = '\0';
     }
     ~Zi() = default;
     void setZi(std::string zi){
         this->zi = zi;
     }
-    std::string getZi() {
+    [[nodiscard]] std::string getZi() const{
         return zi;
     }
 };
-
-//class Angajat{
-//private:
-//    int cnp;
-//    std::string nume;
-//    int salariu;
-//    int numar_telefon;
-//public:
-//    Angajat(int cnp, std::string nume, int salariu, int numar_telefon) {
-//        this->cnp = cnp;
-//        this->nume = nume;
-//        this->salariu = salariu;
-//        this->numar_telefon = numar_telefon;
-//    }
-//    Angajat(){
-//        this->salariu = 0;
-//    }
-//    ~Angajat() {
-//        cnp = 0;
-//        salariu = 0;
-//        numar_telefon = 0;
-//    }
-//    void setNume(std::string nume){
-//        this->nume = nume;
-//    }
-//    void setSalariu(int salariu){
-//        this->salariu = salariu;
-//    }
-//    void setNumarTelefon(int numar_telefon){
-//        this->numar_telefon = numar_telefon;
-//    }
-//    int getCnp() {
-//        return cnp;
-//    }
-//    std::string getNume() {
-//        return nume;
-//    }
-//    int getSalariu() {
-//        return salariu;
-//    }
-//    int getNumarTelefon() {
-//        return numar_telefon;
-//    }
-//};
 
 class Bilet {
 private:
     int rand;
     int coloana;
-    int nr_bilet;
+    int nr_bilete;
 public:
     Bilet(int nr_bilete, int rand, int coloana) {
-        this->nr_bilet = nr_bilet;
         this->rand = rand;
         this->coloana = coloana;
+        this->nr_bilete = nr_bilete;
     }
-    Bilet(int nr_bilete) {
+    explicit Bilet(int nr_bilete) {
         this->rand = 0;
         this->coloana = 0;
+        this->nr_bilete = nr_bilete;
     }
     Bilet() {
         this->rand = 0;
         this->coloana = 0;
-        this->nr_bilet = 0;
+        this->nr_bilete = 0;
     }
-    ~Bilet() {
-        rand = 0;
-        coloana = 0;
-        nr_bilet = 0;
-    }
+    ~Bilet() = default;
     void setRand(int rand) {
         this->rand = rand;
     }
     void setColoana(int coloana) {
         this->coloana = coloana;
     }
-    void setNrBilet(int nr_bilet) {
-        this->nr_bilet = nr_bilet;
+    void setNrBilet(int nr_bilete) {
+        this->nr_bilete = nr_bilete;
     }
-    int getRand() {
+    [[nodiscard]] int getRand() const {
         return rand;
     }
-    int getColoana() {
+    [[nodiscard]] int getColoana() const {
         return coloana;
     }
-    int getNrBilet() {
-        return nr_bilet;
+    [[nodiscard]] int getNrBilete() const {
+        return nr_bilete;
     }
 };
 
+//Cinema operator+(Cinema cinema, Film *filmeDifuzate) {
+//    cinema.setNrFilme(cinema.getNrFilme()+1);
+//    delete[] filmeDifuzate;
+//    cinema.setFilmeDifuzate() = new Sala[cinema.getNrFilme()];
+//    for (int i = 0; i < cinema.getNrFilme(); ++i) {
+//        cinema.filmeDifuzate[i] = cinema.filmeDifuzate[i];
+//    }
+//    cinema.setFilmeDifuzate[cinema.getNrFilme() - 1] = Sala();
+//    return cinema;
+//}
+
+bool operator==(const Cinema& cinema, const Cinema& aux) {
+    if(cinema.getId() == aux.getId() and cinema.getNumeMall() == aux.getNumeMall())
+        return true;
+    else
+        return false;
+}
 
 int main() {
-
     std::ifstream f("date.txt");
-    int tasta, id_sala, k = 0, loc[63], x, y, nr_bilete=0, ccv;
+    int tasta, id_sala, k, loc[63], x, y, nr_bilete=0, ccv;
     std::string cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, cod_rand, cod_coloana, nr_card, nume_titular, data_exp;
     Cinema Afi_Cotroceni(1, "Afi Cotroceni");
     Cinema Park_Lake(2, "Park Lake");
