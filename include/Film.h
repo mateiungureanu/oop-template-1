@@ -4,27 +4,36 @@
 #include <string>
 #include <iostream>
 
-class Film {
+class Film
+{
 private:
-	std::string numeFilm;
-	float rating;
+    std::string numeFilm;
+    float rating;
 
 public:
-	friend class Cinema;
-	Film(std::string numeFilm, float rating);
-	Film();
-	~Film() = default;
+    friend class Cinema;
+    Film(std::string numeFilm, float rating);
+    Film();
+    ~Film() = default;
 
-	void setRating(float rating);
-	void setNumeFilm(std::string numeFilm);
+    void
+    setRating(float rating);
+    void
+    setNumeFilm(std::string numeFilm);
 
-	[[nodiscard]] float getRating() const;
-	[[nodiscard]] std::string getNumeFilm() const;
+    [[nodiscard]] float
+    getRating() const;
+    [[nodiscard]] std::string
+    getNumeFilm() const;
 
-	bool operator==(const Film& film);
-	Film& operator=(const Film &aux);
-	friend std::ostream& operator<<(std::ostream& out, const Film& film);
-	static bool comparaFilme(const Film& a, const Film& b);
+    bool
+    operator==(const Film &film);
+    Film &
+    operator=(const Film &aux);
+    friend std::ostream &
+    operator<<(std::ostream &out, const Film &film);
+    static bool
+    comparaFilme(const Film &a, const Film &b);
 };
 
 #endif
