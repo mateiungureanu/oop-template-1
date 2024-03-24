@@ -8,20 +8,20 @@ class Film
 {
 private:
     std::string numeFilm;
-    float rating;
+    double rating;
 
 public:
     friend class Cinema;
-    Film(std::string numeFilm, float rating);
+    Film(std::string numeFilm, double rating);
     Film();
     ~Film() = default;
 
     void
-    setRating(float rating);
+    setRating(double rating);
     void
     setNumeFilm(std::string numeFilm);
 
-    [[nodiscard]] float
+    [[nodiscard]] double
     getRating() const;
     [[nodiscard]] std::string
     getNumeFilm() const;

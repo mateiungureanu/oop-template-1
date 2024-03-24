@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Film::Film(std::string numeFilm, float rating)
+Film::Film(std::string numeFilm, double rating)
 {
     this->numeFilm = std::move(numeFilm);
     this->rating = rating;
@@ -13,16 +13,16 @@ Film::Film()
     this->rating = 0;
 }
 void
-Film::setRating(float rating)
+Film::setRating(double rating1)
 {
-    this->rating = rating;
+    this->rating = rating1;
 }
 void
-Film::setNumeFilm(std::string numeFilm)
+Film::setNumeFilm(std::string numeFilm1)
 {
-    this->numeFilm = std::move(numeFilm);
+    this->numeFilm = std::move(numeFilm1);
 }
-float
+double
 Film::getRating() const
 {
     return rating;

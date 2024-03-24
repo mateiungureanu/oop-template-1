@@ -11,6 +11,6 @@ TEST(FilmConstructor, DefaultConstructor)
 TEST(FilmConstructor, ParameterizedConstructor)
 {
     Film film("Inception", 8.2);
-    EXPECT_EQ((float)8.2, film.getRating());
+    EXPECT_EQ((double)8.2, film.getRating());
     EXPECT_EQ("Inception", film.getNumeFilm());
 }
