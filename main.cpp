@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <fstream>
 #include <array>
 #include <string>
 #include <utility>
@@ -52,8 +51,9 @@ public:
         nrLocuri = other.nrLocuri;
         nrRanduri = other.nrRanduri;
         nrColoane = other.nrColoane;
-        if (locuriOcupate == nullptr)
+        if (locuriOcupate == nullptr) {
             locuriOcupate = new bool[other.nrLocuri];
+        }
         for (int i = 0; i < other.nrLocuri; i++)
         {
             locuriOcupate[i] = other.locuriOcupate[i];
@@ -200,7 +200,9 @@ public:
             }
         }
         if (ok == 0)
+        {
             std::cout << "Filmul este deja in lista filmelor difuzate.\n";
+        }
         else
         {
             Film *nouFilmeDifuzate = new Film[nrFilme + 1];
@@ -244,7 +246,9 @@ public:
             filmeDifuzate = nouFilmeDifuzate;
         }
         else
+        {
             std::cout << "Filmul nu exista in lista filmelor difuzate.\n";
+        }
     }
 
     void
@@ -261,10 +265,9 @@ public:
         std::cout << "Filmul nu exista in lista filmelor difuzate.\n";
     }
 
-    Cinema(const Cinema &aux)
+    Cinema(const Cinema &aux) : numeMall(aux.numeMall)
     {
         id = aux.id;
-        numeMall = aux.numeMall;
         nrFilme = aux.nrFilme;
         filmeDifuzate = new Film[aux.nrFilme];
         for (int i = 0; i < aux.nrFilme; i++)
@@ -296,7 +299,9 @@ public:
     operator+(Cinema &cinema)
     {
         if (this == &cinema)
+        {
             return *this;
+        }
         Cinema nouCinema;
         nouCinema.id = this->id;
         nouCinema.numeMall = this->numeMall;
@@ -391,9 +396,13 @@ bool
 operator==(const Cinema &cinema, const Cinema &aux)
 {
     if (cinema.getId() == aux.getId() and cinema.getNumeMall() == aux.getNumeMall())
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 int
@@ -445,7 +454,9 @@ client_sau_admin:
         << "\nPentru a cumpara un bilet de film apasati tasta 1.\n[admin] Pentru a va loga apasati tasta 2.\nPentru a iesi apasati tasta 0.\n";
     f >> tasta;
     if (std::stoi(tasta) == 0)
+    {
         goto exit;
+    }
     if (std::stoi(tasta) < 0)
     {
         std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
@@ -478,7 +489,9 @@ client_sau_admin:
         std::cout << "Apasati tasta 0 pentru a merge inapoi.\n";
         f >> tasta;
         if (std::stoi(tasta) == 0)
+        {
             goto citeste_cinema;
+        }
         if (std::stoi(tasta) < 0)
         {
             std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
@@ -486,12 +499,21 @@ client_sau_admin:
         }
         std::cout << "Ati selectat " << cinemauri[0].getFilmeDifuzate()[std::stoi(tasta) - 1].getNumeFilm() << "\n";
         cod_film = cinemauri[0].getFilmeDifuzate()[std::stoi(tasta) - 1].getNumeFilm();
+        for (int i = 0; (unsigned long long)i < cod_film.length(); ++i)
+        {
+            if (cod_film[i] == ' ')
+            {
+                cod_film[i] = '_';
+            }
+        }
     citeste_zi:
         std::cout
             << "\nApasati tasta corespunzatoare zilei dorite:\n1.Luni\n2.Marti\n3.Miercuri\n4.Joi\n5.Vineri\n6.Sambata\n7.Duminica\nApasati tasta 0 pentru a merge inapoi.\n";
         f >> tasta;
         if (std::stoi(tasta) == 0)
+        {
             goto citeste_film;
+        }
         if (std::stoi(tasta) < 0)
         {
             std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
@@ -504,7 +526,9 @@ client_sau_admin:
             << "\nApasati tasta corespunzatoare orei dorite:\n1.10:30\n2.12:00\n3.13:30\n4.15:00\n5.16:30\n6.18:00\n7.19:30\n8.21:00\n9.22:30\nApasati tasta 0 pentru a merge inapoi.\n";
         f >> tasta;
         if (std::stoi(tasta) == 0)
+        {
             goto citeste_zi;
+        }
         if (std::stoi(tasta) < 0)
         {
             std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
@@ -515,15 +539,19 @@ client_sau_admin:
         id_sala = std::stoi(tasta) % 2;
         cod_sala = std::to_string(id_sala);
         if (id_sala == 1)
+        {
             for (int i = 0; i < 63; i++)
             {
                 loc[i] = S1->getLocuriOcupate()[i];
             }
+        }
         else
+        {
             for (int i = 0; i < 63; i++)
             {
                 loc[i] = S2->getLocuriOcupate()[i];
             }
+        }
         std::cout << "\nLocurile disponibile sunt marcate cu 0, locurile ocupate sunt marcate cu 1.\n";
         std::cout << "Pentru a alege locul tastati randul urmat de tasta Enter apoi numarul scaunului.\n\n";
         std::cout << " __";
@@ -552,7 +580,9 @@ client_sau_admin:
         citeste_rand:
             std::cout << "\nAlegeti randul.\nApasati tasta 0 pentru a merge inapoi.\n";
             if (nr_bilete != 0)
+            {
                 std::cout << "Apasati tasta 10 pentru a continua cu plata.\n";
+            }
             f >> x;
             if (x == 10)
             {
@@ -616,7 +646,9 @@ client_sau_admin:
                         std::cout << "2 ";
                     }
                     else
+                    {
                         std::cout << loc[i * 9 + j] << " ";
+                    }
                 }
                 std::cout << '\n';
             }
@@ -672,7 +704,9 @@ client_sau_admin:
             << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
         f >> tasta;
         if (std::stoi(tasta) == 0)
+        {
             goto exit;
+        }
         if (std::stoi(tasta) < 0)
         {
             std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
