@@ -98,7 +98,10 @@ FetchContent_MakeAvailable(googletest)
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp ${SOURCES})
+add_executable(${PROJECT_NAME} main.cpp ${SOURCES}
+        Film.h
+        Film.cpp
+)
 
 ###############################################################################
 
@@ -164,3 +167,19 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(test_oop)
+
+cmake_minimum_required(VERSION 3.10)
+project(oop-template-1)
+
+# Add the executable
+add_executable(${PROJECT_NAME} main.cpp Film.cpp)
+
+# Optionally, you can include the header files explicitly
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Optionally, you can specify C++ standard
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        CXX_STANDARD 11
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+)
