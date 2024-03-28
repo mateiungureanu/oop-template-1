@@ -164,3 +164,6 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(test_oop)
+
+cmake_minimum_required(VERSION 3.10)
+project(oop-template-1)

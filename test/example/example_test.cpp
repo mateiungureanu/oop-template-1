@@ -1,7 +1,16 @@
 #include <gtest/gtest.h>
-#include "example.h"
+#include <Film.h>
 
-TEST(SuiteName, TestName) {
-    EXPECT_EQ(doSomething(10), 10);
-    // Other assertions: https://google.github.io/googletest/reference/assertions.html#boolean
+TEST(FilmConstructor, DefaultConstructor)
+{
+    Film film;
+    EXPECT_EQ(0, film.getRating());
+    EXPECT_EQ("", film.getNumeFilm());
+}
+
+TEST(FilmConstructor, ParameterizedConstructor)
+{
+    Film film("Inception", 8.2);
+    EXPECT_EQ((double)8.2, film.getRating());
+    EXPECT_EQ("Inception", film.getNumeFilm());
 }
