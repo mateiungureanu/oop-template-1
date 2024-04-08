@@ -4,6 +4,10 @@
 #include <utility>
 #include <vector>
 #include <algorithm>
+#include <memory>
+#include <stdexcept>
+#include <typeinfo>
+#include <cxxabi.h>
 #include "Film.h"
 
 class Sala
@@ -51,7 +55,8 @@ public:
         nrLocuri = other.nrLocuri;
         nrRanduri = other.nrRanduri;
         nrColoane = other.nrColoane;
-        if (locuriOcupate == nullptr) {
+        if (locuriOcupate == nullptr)
+        {
             locuriOcupate = new bool[other.nrLocuri];
         }
         for (int i = 0; i < other.nrLocuri; i++)
@@ -267,12 +272,12 @@ public:
 
     Cinema(const Cinema &aux) : numeMall(aux.numeMall)
     {
-        id = aux.id;
-        nrFilme = aux.nrFilme;
+        this->id = aux.id;
+        this->nrFilme = aux.nrFilme;
         filmeDifuzate = new Film[aux.nrFilme];
         for (int i = 0; i < aux.nrFilme; i++)
         {
-            filmeDifuzate[i] = aux.filmeDifuzate[i];
+            this->filmeDifuzate[i] = aux.filmeDifuzate[i];
         }
     }
 
@@ -347,7 +352,7 @@ public:
 
 class Bilet
 {
-private:
+protected:
     int rand;
     int coloana;
 public:
@@ -365,7 +370,7 @@ public:
         this->coloana = 0;
     }
 
-    ~Bilet() = default;
+    virtual ~Bilet() = default;
 
     void
     setRand(int rand1)
@@ -390,6 +395,227 @@ public:
     {
         return coloana;
     }
+
+    Bilet(const Bilet &aux)
+    {
+        this->rand = aux.rand;
+        this->coloana = aux.coloana;
+    }
+
+    Bilet &
+    operator=(const Bilet &aux)
+    {
+        if (this == &aux)
+        {
+            return *this;
+        }
+        this->rand = aux.rand;
+        this->coloana = aux.coloana;
+    }
+
+/// function id never used
+//    virtual void
+//    functieUpCast()
+//    {
+//        std::cout << "A";
+//    }
+
+    virtual void
+    afiseaza()
+    {
+        std::cout << "Bilet " << getType();
+        std::cout << " | Rand: " << rand << ", Loc: " << coloana;
+    }
+
+    virtual std::string
+    getType() = 0;
+
+    virtual int
+    getPret() = 0;
+};
+
+class Bilet_Normal : public Bilet
+{
+private:
+    int pretNormal;
+public:
+    Bilet_Normal(int rand, int coloana) : Bilet(rand, coloana), pretNormal(25) {}
+
+    Bilet_Normal() : Bilet(), pretNormal(25) {}
+
+    ~Bilet_Normal() override = default;
+
+/// function is never used
+//    void
+//    setPretNormal(int pretNormal1)
+//    {
+//        this->pretNormal = pretNormal1;
+//    }
+
+    [[nodiscard]] int
+    getPret() override
+    {
+        return pretNormal;
+    }
+
+    Bilet_Normal(const Bilet_Normal &aux) : Bilet(aux)
+    {
+        this->pretNormal = aux.pretNormal;
+    }
+
+    Bilet_Normal &
+    operator=(const Bilet_Normal &aux)
+    {
+        if (this == &aux)
+        {
+            return *this;
+        }
+        Bilet::operator=(aux);
+        this->pretNormal = aux.pretNormal;
+    }
+
+/// function is never used
+//    void
+//    functieUpCast() override
+//    {
+//        Bilet* basePtr = this;
+//        std::cout << "Rand: " << basePtr->getRand() << ", Coloana: " << basePtr->getColoana() << std::endl;
+//    }
+
+    void
+    afiseaza() override
+    {
+        Bilet::afiseaza();
+        std::cout << " | Pret: " << pretNormal;
+    }
+
+    [[nodiscard]] std::string
+    getType() override
+    {
+        return "Normal";
+    }
+
+    static std::unique_ptr<Bilet_Normal>
+    downgradeBilet()
+    {
+        return std::make_unique<Bilet_Normal>();
+    }
+};
+
+class Bilet_VIP : public Bilet
+{
+private:
+    int pretVIP;
+    bool popcornGratis;
+    bool bauturiGratis;
+public:
+    Bilet_VIP(int rand, int coloana, bool popcornGratis, bool bauturiGratis) : Bilet(rand, coloana),
+                                                                               pretVIP(60),
+                                                                               popcornGratis(popcornGratis),
+                                                                               bauturiGratis(bauturiGratis) {}
+
+    Bilet_VIP(int rand, int coloana) : Bilet(rand, coloana), pretVIP(60), popcornGratis(true), bauturiGratis(true) {}
+
+    Bilet_VIP() : Bilet(), pretVIP(60), popcornGratis(true), bauturiGratis(true) {}
+
+    ~Bilet_VIP() override = default;
+
+/// function is never used
+//    void
+//    setPretVIP(int pretVIP1)
+//    {
+//        this->pretVIP = pretVIP1;
+//    }
+
+/// function is never used
+//    void
+//    setPopcornGratis(bool popcornGratis1)
+//    {
+//        this->popcornGratis = popcornGratis1;
+//    }
+
+/// function is never used
+//    void
+//    setBauturiGratis(bool bauturiGratis1)
+//    {
+//        this->bauturiGratis = bauturiGratis1;
+//    }
+
+    [[nodiscard]] int
+    getPret() override
+    {
+        return pretVIP;
+    }
+
+/// function is never used
+//    [[nodiscard]] bool
+//    getPopcornGratis() const
+//    {
+//        return popcornGratis;
+//    }
+
+/// function is never used
+//    [[nodiscard]] bool
+//    getBauturiGratis() const
+//    {
+//        return bauturiGratis;
+//    }
+
+    Bilet_VIP(const Bilet_VIP &aux) : Bilet(aux)
+    {
+        this->pretVIP = aux.pretVIP;
+        this->popcornGratis = aux.popcornGratis;
+        this->bauturiGratis = aux.bauturiGratis;
+    }
+
+    Bilet_VIP &
+    operator=(const Bilet_VIP &aux)
+    {
+        if (this == &aux)
+        {
+            return *this;
+        }
+        Bilet::operator=(aux);
+        this->pretVIP = aux.pretVIP;
+        this->popcornGratis = aux.popcornGratis;
+        this->bauturiGratis = aux.bauturiGratis;
+    }
+
+/// function is never used
+//    void
+//    functieUpCast() override
+//    {
+//        Bilet* basePtr = this;
+//        std::cout << "Rand: " << basePtr->getRand() << ", Coloana: " << basePtr->getColoana() << std::endl;
+//    }
+
+    void
+    afiseaza() override
+    {
+        Bilet::afiseaza();
+        std::cout << " | Pret: " << pretVIP;
+        std::cout << " | Bonus-uri VIP: ";
+        if (popcornGratis)
+        {
+            std::cout << "popcorn gratis ";
+        }
+        if (bauturiGratis)
+        {
+            std::cout << "bauturi gratis";
+        }
+    }
+
+    static std::unique_ptr<Bilet_VIP>
+    upgradeBilet()
+    {
+        return std::make_unique<Bilet_VIP>();
+    }
+
+    [[nodiscard]] std::string
+    getType() override
+    {
+        return "VIP";
+    }
 };
 
 bool
@@ -409,8 +635,9 @@ int
 main()
 {
     std::istream &f = std::cin;
-    int id_sala, k, loc[63], x, y, nr_bilete = 0, ccv;
-    std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, cod_rand, cod_coloana, nr_card, nume_titular,
+    int id_sala, k, loc[63], x, y, nr_bilete = 0, suma = 0, ccv;
+    std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, cod_rand, cod_coloana, cod_beneficii, nr_card,
+        nume_titular,
         data_exp;
     std::array<Cinema, 3> cinemauri{};
     cinemauri[0].setNumeMall("Afi Cotroceni");
@@ -447,7 +674,11 @@ main()
     };
     Sala *S1 = new Sala(1);
     Sala *S2 = new Sala(2);
-    std::array<Bilet, 9> bilete{};
+    std::array<std::unique_ptr<Bilet>, 63> bilete{};
+    for (int i = 0; i < 63; i++)
+    {
+        bilete[i] = std::make_unique<Bilet_Normal>(0, 0);
+    }
     std::cout << "\nBine ati venit la Cinema Multiplex!\n";
 client_sau_admin:
     std::cout
@@ -457,9 +688,9 @@ client_sau_admin:
     {
         goto exit;
     }
-    if (std::stoi(tasta) < 0)
+    if (std::stoi(tasta) < 0 || std::stoi(tasta) > 2)
     {
-        std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
+        std::cout << "\nVa rugam apasati o tasta valida.\n";
         goto client_sau_admin;
     }
     if (std::stoi(tasta) == 1)
@@ -472,9 +703,9 @@ client_sau_admin:
         {
             goto client_sau_admin;
         }
-        if (std::stoi(tasta) < 0)
+        if (std::stoi(tasta) < 0 || std::stoi(tasta) > 3)
         {
-            std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_cinema;
         }
         std::cout << "Ati selectat " << cinemauri[std::stoi(tasta) - 1].getNumeMall() << "\n";
@@ -492,9 +723,9 @@ client_sau_admin:
         {
             goto citeste_cinema;
         }
-        if (std::stoi(tasta) < 0)
+        if (std::stoi(tasta) < 0 || std::stoi(tasta) > cinemauri[0].getNrFilme())
         {
-            std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_film;
         }
         std::cout << "Ati selectat " << cinemauri[0].getFilmeDifuzate()[std::stoi(tasta) - 1].getNumeFilm() << "\n";
@@ -514,9 +745,9 @@ client_sau_admin:
         {
             goto citeste_film;
         }
-        if (std::stoi(tasta) < 0)
+        if (std::stoi(tasta) < 0 || std::stoi(tasta) > 7)
         {
-            std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_zi;
         }
         std::cout << "Ati selectat " << zile[std::stoi(tasta) - 1] << "\n";
@@ -529,9 +760,9 @@ client_sau_admin:
         {
             goto citeste_zi;
         }
-        if (std::stoi(tasta) < 0)
+        if (std::stoi(tasta) < 0 || std::stoi(tasta) > 9)
         {
-            std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_ora;
         }
         cod_ora = ore[std::stoi(tasta) - 1];
@@ -575,51 +806,52 @@ client_sau_admin:
             }
             std::cout << '\n';
         }
-        while (nr_bilete < 9)
+        while (nr_bilete < 63)
         {
-        citeste_rand:
-            std::cout << "\nAlegeti randul.\nApasati tasta 0 pentru a merge inapoi.\n";
+        citeste_loc:
+            std::cout
+                << "\nAlegeti locul. Introduceti randul si coloana locului dorit.\nApasati de 2 ori tasta 0 pentru a merge inapoi.\n";
             if (nr_bilete != 0)
             {
-                std::cout << "Apasati tasta 10 pentru a continua cu plata.\n";
+                std::cout << "Apasati de 2 ori tasta 10 pentru a continua cu plata.\n";
             }
-            f >> x;
-            if (x == 10)
+            f >> x >> y;
+            if (x == 10 && y == 10)
             {
                 break;
             }
-            if (x == 0)
+            if (x == 0 && y == 0)
             {
                 if (nr_bilete == 0)
                 {
                     goto citeste_ora;
                 }
                 nr_bilete--;
-                bilete[nr_bilete].setColoana(0);
-                goto citeste_coloana;
+                bilete[nr_bilete]->setRand(0);
+                bilete[nr_bilete]->setColoana(0);
+                goto citeste_loc;
             }
-            if (x < 0)
+            if (x < 0 || y < 0 || x == 9 || x > 10 || y > 10 || (x == 10 && y != 10) || (x == 0 && y != 0)
+                || (x != 10 && y == 10) || (x != 0 && y == 0))
             {
-                std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
-                goto citeste_rand;
+                std::cout << "\nVa rugam apasati o tasta valida.\n";
+                goto citeste_loc;
             }
-            bilete[nr_bilete].setRand(x);
+            if (loc[x * 9 + y] == 1)
+            {
+                std::cout << "\nLocul este deja ocupat.\n";
+                goto citeste_loc;
+            }
+            if (loc[x * 9 + y] == 2)
+            {
+                std::cout << "\nLocul este deja ales de dvs.\n";
+                goto citeste_loc;
+            }
+            bilete[nr_bilete]->setRand(x);
+            bilete[nr_bilete]->setColoana(y);
             cod_rand = std::to_string(x);
-        citeste_coloana:
-            std::cout << "\nAlegeti locul.\nApasati tasta 0 pentru a merge inapoi.\n";
-            f >> y;
-            if (y == 0)
-            {
-                bilete[nr_bilete].setRand(0);
-                goto citeste_rand;
-            }
-            if (y < 0)
-            {
-                std::cout << "\nVa rugam apasati o tasta mai mare sau egala cu 0.\n";
-                goto citeste_coloana;
-            }
-            bilete[nr_bilete].setColoana(y);
             cod_coloana = std::to_string(y);
+            loc[(bilete[nr_bilete]->getRand() - 1) * 9 + (bilete[nr_bilete]->getColoana() - 1)] = 2;
             nr_bilete++;
             k = 0;
             std::cout << "\nLocurile alese de dvs. sunt cele marcate cu 2:\n";
@@ -640,7 +872,7 @@ client_sau_admin:
                 std::cout << i + 1 << "  ";
                 for (int j = 0; j < 9; j++)
                 {
-                    if (bilete[k].getRand() == i + 1 and bilete[k].getColoana() == j + 1 and k < nr_bilete)
+                    if (bilete[k]->getRand() == i + 1 and bilete[k]->getColoana() == j + 1 and k < nr_bilete)
                     {
                         k++;
                         std::cout << "2 ";
@@ -655,9 +887,104 @@ client_sau_admin:
         }
         for (int i = 0; i < nr_bilete; i++)
         {
-            loc[(bilete[i].getRand() - 1) * 9 + (bilete[i].getColoana() - 1)] = 1;
+            loc[(bilete[i]->getRand() - 1) * 9 + (bilete[i]->getColoana() - 1)] = 1;
+            suma += bilete[i]->getPret();
         }
-        std::cout << "\nNumarul cardului [12 cifre]: ";
+    upgrade_bilet:
+        std::cout
+            << "\nDoriti sa upgradati sau sa downgradati un bilet? Apasati tasta corespunzatoare:\n1.Nu, multumesc\n2.Vreau sa upgradez la bilet VIP (60 lei)\n3.Vreau sa downgradez la bilet normal (25 lei)\n";
+        f >> tasta;
+        if (std::stoi(tasta) < 1 || std::stoi(tasta) > 3)
+        {
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
+            goto upgrade_bilet;
+        }
+        if (std::stoi(tasta) == 1)
+        {
+            std::cout << "\nAti ales sa nu modificati biletele.\n";
+            cod_beneficii = "Normal";
+            goto plata;
+        }
+        if (std::stoi(tasta) == 2)
+        {
+            std::cout << "\nAlegeti biletul pe care doriti sa il upgradati:\n";
+            for (int i = 0; i < nr_bilete; ++i)
+            {
+                std::cout << i + 1 << ".";
+                bilete[i]->afiseaza();
+                std::cout << std::endl;
+            }
+            f >> tasta;
+            int index = std::stoi(tasta) - 1;
+            std::cout << tasta << std::endl;
+            std::cout << index << std::endl;
+            std::cout << nr_bilete << std::endl;
+            std::cout << bilete[index]->getType() << std::endl;
+
+            int status;
+            char * realname = abi::__cxa_demangle(typeid(tasta).name(), 0, 0, &status);
+            std::cout<< realname << std::endl;
+            free(realname);
+
+            std::cout << typeid(std::string("Normal")).name() << std::endl;
+            std::cout << typeid(bilete[index]->getType()).name() << std::endl;
+            /// aici se rupe firul, nu intra in iful 3
+            if (index >= nr_bilete || index < 0)
+            {
+                std::cout << "\nVa rugam apasati o tasta intre 0 si numarul de bilete alese.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == "VIP")
+            {
+                std::cout << "\nBiletul nu poate fi upgradat pentru ca e un bilet VIP.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == std::string("Normal"))
+            {
+                suma -= bilete[index]->getPret();
+                std::cout << suma;
+                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index].get());
+                bilete[index] = Bilet_VIP::upgradeBilet();
+                std::cout << "\nBiletul a fost upgradat la VIP.";
+                suma += pVIP->getPret();
+                cod_beneficii = "VIP";
+                goto upgrade_bilet;
+            }
+        }
+        if (std::stoi(tasta) == 3)
+        {
+            std::cout << "\nAlegeti biletul pe care doriti sa il downgradati:\n";
+            for (int i = 0; i < nr_bilete; i++)
+            {
+                std::cout << i + 1 << ".";
+                bilete[i]->afiseaza();
+                std::cout << std::endl;
+            }
+            f >> tasta;
+            int index = std::stoi(tasta) - 1;
+            if (index >= nr_bilete || index < 0)
+            {
+                std::cout << "\nVa rugam apasati o tasta intre 0 si numarul de bilete alese.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == "Normal")
+            {
+                std::cout << "\nBiletul nu poate fi downgradat pentru ca e un bilet normal.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == "VIP")
+            {
+                suma -= bilete[index]->getPret();
+                auto *pNormal = dynamic_cast<Bilet_Normal *>(bilete[index].get());
+                bilete[index] = Bilet_Normal::downgradeBilet();
+                std::cout << "\nBiletul a fost downgradat la Normal.";
+                suma += pNormal->getPret();
+                cod_beneficii = "normal";
+                goto upgrade_bilet;
+            }
+        }
+    plata:
+        std::cout << "\nDe platit: " << suma << "\nNumarul cardului [12 cifre]: ";
         f.get();
         std::getline(f, nr_card);
         std::cout << nr_card << "\n";
@@ -673,15 +1000,15 @@ client_sau_admin:
         if (nr_bilete == 1)
         {
             std::cout << "\n\nCodul biletului dvs. este: " << cod_cinema << cod_film << cod_zi << cod_ora << cod_sala
-                      << cod_rand << cod_coloana << "\n";
+                      << cod_rand << cod_coloana << cod_beneficii << "\n";
         }
         else
         {
             std::cout << "\n\nCodurile biletelor dvs. sunt:\n";
             for (int i = 0; i < nr_bilete; i++)
             {
-                std::cout << cod_cinema << cod_film << cod_zi << cod_ora << cod_sala << bilete[i].getRand()
-                          << bilete[i].getColoana() << "\n";
+                std::cout << cod_cinema << cod_film << cod_zi << cod_ora << cod_sala << bilete[i]->getRand()
+                          << bilete[i]->getColoana() << bilete[i]->getType() << "\n";
             }
         }
         std::cout << "\nVa multumim pentru achizitie! Vizionare placuta!\n";
