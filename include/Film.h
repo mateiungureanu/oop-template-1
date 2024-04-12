@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 class Film
 {
@@ -27,7 +28,7 @@ public:
     getNumeFilm() const;
 
     bool
-    operator==(const Film &film);
+    operator==(const Film &film) const;
     Film &
     operator=(const Film &aux);
     friend std::ostream &

@@ -14,7 +14,8 @@
 - Apasati tasta corespunzatoare zilei dorite (daca doriti sa mergeti inapoi apasati tasta 0)
 - Apasati tasta corespunzatoare orei dorite (daca doriti sa mergeti inapoi apasati tasta 0)
 - Alegeti locurile dorite prin apasarea tastelor corespunzatoare randului si scaunului dorit
-- Cand ati terminat, apasati tasta 10 (daca doriti sa mergeti inapoi apasati tasta 0)
+- Cand ati terminat, apasati de 2 ori tasta 10 (daca doriti sa mergeti inapoi apasati de 2 ori tasta 0)
+- Alegeti daca doriti sa upgradati un bilet, sa downgradati un bilet, sau sa modificati beneficiile unui bilet special (4Dx sau VIP) (daca nu doriti sa modificati nimic apasati tasta 1)
 - Introduceti detaliile cardului (numarul cardului, numele titularului, data expirarii, CCV)
 - Codurile biletelor vor fi afisate pe ecran dupa efectuarea platii
 
