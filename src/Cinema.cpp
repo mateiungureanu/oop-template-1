@@ -35,8 +35,7 @@ Cinema::setNumeMall(std::string numeMall1)
 }
 
 // cppcheck-suppress unusedFunction
-void
-Cinema::setNrFilme(int nrFilme1)
+void Cinema::setNrFilme(int nrFilme1)
 {
     this->nrFilme = nrFilme1;
 }
