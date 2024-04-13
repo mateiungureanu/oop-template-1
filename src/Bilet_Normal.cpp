@@ -28,7 +28,7 @@ Bilet_Normal::setColoana(int coloana1)
     this->coloana = coloana1;
 }
 
-// cppcheck-suppress unusedFunctionSymbol
+// cppcheck-suppress unusedFunction
 void
 Bilet_Normal::setPret(int pret1)
 {

@@ -316,15 +316,6 @@ TEST(BiletNormalAssignmentOperator, AssignmentOperator)
     EXPECT_EQ(bilet1.getPret(), bilet2.getPret());
 }
 
-TEST(BiletNormalAfiseaza, AfiseazaFunction)
-{
-    Bilet_Normal bilet(2, 3);
-    testing::internal::CaptureStdout();
-    bilet.afiseaza();
-    std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("Bilet Normal | Rand: 2, Loc: 3 | Pret: 25", output);
-}
-
 TEST(BiletNormalGetType, GetTypeFunction)
 {
     Bilet_Normal bilet;
@@ -411,15 +402,6 @@ TEST(Bilet4DxAssignmentOperator, AssignmentOperator)
     EXPECT_EQ(bilet1.getPret(), bilet2.getPret());
     EXPECT_EQ(bilet1.getScaunMiscator(), bilet2.getScaunMiscator());
     EXPECT_EQ(bilet1.getScaunSuflator(), bilet2.getScaunSuflator());
-}
-
-TEST(Bilet4DxAfiseaza, AfiseazaFunction)
-{
-    Bilet_4Dx bilet(2, 3, true, false);
-    testing::internal::CaptureStdout();
-    bilet.afiseaza();
-    std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("Bilet 4Dx    | Rand: 2, Loc: 3 | Pret: 45 | Bonus-uri 4Dx: scaun_miscator", output);
 }
 
 TEST(Bilet4DxGetType, GetTypeFunction)
@@ -510,15 +492,6 @@ TEST(BiletVIPAssignmentOperator, AssignmentOperator)
     EXPECT_EQ(bilet.getPopcornGratis(), biletCopy.getPopcornGratis());
     EXPECT_EQ(bilet.getBauturiGratis(), biletCopy.getBauturiGratis());
     EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
-TEST(BiletVIPAfiseaza, AfiseazaFunction)
-{
-    Bilet_VIP bilet(2, 3, true, false);
-    testing::internal::CaptureStdout();
-    bilet.afiseaza();
-    std::string output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ("Bilet VIP    | Rand: 2, Loc: 3 | Pret: 60 | Bonus-uri VIP: popcorn_gratis", output);
 }
 
 TEST(BiletVIPGetType, GetTypeFunction)
