@@ -28,6 +28,8 @@ Bilet_Normal::setColoana(int coloana1)
     this->coloana = coloana1;
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 void
 Bilet_Normal::setPret(int pret1)
 {

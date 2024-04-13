@@ -60,12 +60,15 @@ Sala::operator=(const Sala &other)
     return *this;
 }
 
+/// function is never used
 void
 Sala::setIdSala(int id1)
 {
     this->id = id1;
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 void
 Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 {
@@ -78,24 +81,32 @@ Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
     }
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 [[nodiscard]] int
 Sala::getIdSala() const
 {
     return id;
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 [[nodiscard]] int
 Sala::getNrLocuri() const
 {
     return nrLocuri;
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 [[nodiscard]] int
 Sala::getNrRanduri() const
 {
     return nrRanduri;
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 [[nodiscard]] int
 Sala::getNrColoane() const
 {

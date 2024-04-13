@@ -34,6 +34,8 @@ Cinema::setNumeMall(std::string numeMall1)
     this->numeMall = std::move(numeMall1);
 }
 
+/// function is never used
+// NOSONAR: Suppress unused function warning for this line
 void
 Cinema::setNrFilme(int nrFilme1)
 {
