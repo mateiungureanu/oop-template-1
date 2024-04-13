@@ -35,7 +35,7 @@ Cinema::setNumeMall(std::string numeMall1)
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 void
 Cinema::setNrFilme(int nrFilme1)
 {

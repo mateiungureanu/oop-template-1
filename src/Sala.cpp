@@ -61,6 +61,7 @@ Sala::operator=(const Sala &other)
 }
 
 /// function is never used
+// cppcheck-suppress unusedFunction
 void
 Sala::setIdSala(int id1)
 {
@@ -68,7 +69,7 @@ Sala::setIdSala(int id1)
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 void
 Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 {
@@ -82,7 +83,7 @@ Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 [[nodiscard]] int
 Sala::getIdSala() const
 {
@@ -90,7 +91,7 @@ Sala::getIdSala() const
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 [[nodiscard]] int
 Sala::getNrLocuri() const
 {
@@ -98,7 +99,7 @@ Sala::getNrLocuri() const
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 [[nodiscard]] int
 Sala::getNrRanduri() const
 {
@@ -106,7 +107,7 @@ Sala::getNrRanduri() const
 }
 
 /// function is never used
-// NOSONAR: Suppress unused function warning for this line
+// cppcheck-suppress unusedFunction
 [[nodiscard]] int
 Sala::getNrColoane() const
 {
