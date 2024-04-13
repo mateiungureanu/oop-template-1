@@ -61,15 +61,13 @@ Sala::operator=(const Sala &other)
 }
 
 // cppcheck-suppress unusedFunction
-void
-Sala::setIdSala(int id1)
+void Sala::setIdSala(int id1)
 {
     this->id = id1;
 }
 
 // cppcheck-suppress unusedFunction
-void
-Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
+void Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 {
     this->nrLocuri = nrLocuri1;
     delete[] this->locuriOcupate;
@@ -81,34 +79,33 @@ Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 }
 
 // cppcheck-suppress unusedFunction
-[[nodiscard]] int
-Sala::getIdSala() const
+[[nodiscard]] int Sala::getIdSala() const
 {
     return id;
 }
 
 // cppcheck-suppress unusedFunction
-[[nodiscard]] int
-Sala::getNrLocuri() const
+[[nodiscard]] int Sala::getNrLocuri() const
 {
     return nrLocuri;
 }
 
 // cppcheck-suppress unusedFunction
-[[nodiscard]] int
-Sala::getNrRanduri() const
+[[nodiscard]] int Sala::getNrRanduri() const
 {
     return nrRanduri;
 }
 
-// cppcheck-suppress unusedFunction
+
 [[nodiscard]] int
+// cppcheck-suppress unusedFunction
 Sala::getNrColoane() const
 {
     return nrColoane;
 }
 
 [[nodiscard]] bool *
+// cppcheck-suppress unusedFunction
 Sala::getLocuriOcupate() const
 {
     return locuriOcupate;
