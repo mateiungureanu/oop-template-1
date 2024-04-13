@@ -34,7 +34,7 @@ Cinema::setNumeMall(std::string numeMall1)
     this->numeMall = std::move(numeMall1);
 }
 
-// cppcheck-suppress unusedFunction
+// cppcheck-suppress unusedFunctionSymbol
 void
 Cinema::setNrFilme(int nrFilme1)
 {
