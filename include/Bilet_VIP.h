@@ -14,7 +14,7 @@ private:
 public:
     Bilet_VIP(int rand, int coloana, bool popcornGratis, bool bauturiGratis);
 
-    explicit Bilet_VIP(int rand = 0, int coloana = 0);
+    explicit Bilet_VIP(int rand, int coloana); // = 0, = 0, nu mai stiu pentru ce erau dar merge si fara aparent
 
     Bilet_VIP();
 
@@ -42,9 +42,6 @@ public:
 
     Bilet_VIP &
     operator=(const Bilet_VIP &aux);
-
-    void
-    functieUpCast() override;
 
     void
     afiseaza() override;

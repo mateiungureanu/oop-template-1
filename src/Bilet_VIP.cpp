@@ -8,17 +8,11 @@ Bilet_VIP::Bilet_VIP(int rand, int coloana, bool popcornGratis, bool bauturiGrat
                                                                                       pretVIP(60) {}
 
 Bilet_VIP::Bilet_VIP(int rand, int coloana) : Bilet_Normal(rand, coloana),
-                                                      popcornGratis(true),
-                                                      bauturiGratis(true),
-                                                      pretVIP(60) {}
+                                              popcornGratis(true),
+                                              bauturiGratis(true),
+                                              pretVIP(60) {}
 
 Bilet_VIP::Bilet_VIP() : Bilet_Normal(), popcornGratis(true), bauturiGratis(true), pretVIP(60) {}
-
-void
-Bilet_VIP::setPretVIP(int pretVIP1)
-{
-    this->pretVIP = pretVIP1;
-}
 
 void
 Bilet_VIP::setPopcornGratis(bool popcornGratis1)
@@ -30,6 +24,12 @@ void
 Bilet_VIP::setBauturiGratis(bool bauturiGratis1)
 {
     this->bauturiGratis = bauturiGratis1;
+}
+
+void
+Bilet_VIP::setPretVIP(int pretVIP1)
+{
+    this->pretVIP = pretVIP1;
 }
 
 [[nodiscard]] bool
@@ -69,13 +69,6 @@ Bilet_VIP::operator=(const Bilet_VIP &aux)
     this->popcornGratis = aux.popcornGratis;
     this->bauturiGratis = aux.bauturiGratis;
     return *this;
-}
-
-void
-Bilet_VIP::functieUpCast()
-{
-    Bilet_VIP *basePtr = this;
-    std::cout << "Rand: " << basePtr->getRand() << ", Coloana: " << basePtr->getColoana() << std::endl;
 }
 
 void

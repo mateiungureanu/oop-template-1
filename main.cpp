@@ -31,9 +31,7 @@ main()
 {
     std::istream &f = std::cin;
     int id_sala, k, loc[63], x, y, nr_bilete = 0, suma = 0, ccv, index;
-    std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, nr_card,
-        nume_titular,
-        data_exp;
+    std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, nr_card, nume_titular, data_exp;
     std::array<Cinema, 3> cinemauri{};
     cinemauri[0].setNumeMall("Afi Cotroceni");
     cinemauri[1].setNumeMall("Park Lake");
@@ -669,8 +667,7 @@ client_sau_admin:
         std::cout << parola;
         std::cout << "\n\nBuna, " << username;
     actiuni_admin:
-        std::cout
-            << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
+        std::cout << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
         f >> tasta;
         if (std::stoi(tasta) == 0)
         {

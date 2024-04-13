@@ -34,11 +34,8 @@ Sala::Sala(const Sala &other)
     nrLocuri = other.nrLocuri;
     nrRanduri = other.nrRanduri;
     nrColoane = other.nrColoane;
-    if (locuriOcupate == nullptr)
-    {
-        locuriOcupate = new bool[other.nrLocuri];
-    }
-    for (int i = 0; i < other.nrLocuri; i++)
+    locuriOcupate = new bool[nrLocuri];
+    for (int i = 0; i < nrLocuri; i++)
     {
         locuriOcupate[i] = other.locuriOcupate[i];
     }
@@ -85,6 +82,24 @@ Sala::setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1)
 Sala::getIdSala() const
 {
     return id;
+}
+
+[[nodiscard]] int
+Sala::getNrLocuri() const
+{
+    return nrLocuri;
+}
+
+[[nodiscard]] int
+Sala::getNrRanduri() const
+{
+    return nrRanduri;
+}
+
+[[nodiscard]] int
+Sala::getNrColoane() const
+{
+    return nrColoane;
 }
 
 [[nodiscard]] bool *

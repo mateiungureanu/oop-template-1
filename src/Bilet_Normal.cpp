@@ -73,12 +73,6 @@ Bilet_Normal::operator=(const Bilet_Normal &aux)
 }
 
 void
-Bilet_Normal::functieUpCast()
-{
-    std::cout << "A";
-}
-
-void
 Bilet_Normal::afiseaza()
 {
     std::cout << "Bilet Normal | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << pret;

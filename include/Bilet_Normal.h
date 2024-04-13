@@ -44,9 +44,6 @@ public:
     operator=(const Bilet_Normal &aux);
 
     virtual void
-    functieUpCast();
-
-    virtual void
     afiseaza();
 
     virtual std::string

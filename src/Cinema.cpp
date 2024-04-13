@@ -187,7 +187,8 @@ Cinema::operator=(const Cinema &aux)
 Cinema
 Cinema::operator+(Cinema &cinema)
 {
-    if (this == &cinema) {
+    if (this == &cinema)
+    {
         return *this;
     }
     Cinema nouCinema;
@@ -195,19 +196,25 @@ Cinema::operator+(Cinema &cinema)
     nouCinema.numeMall = this->numeMall;
     int totalFilme = this->nrFilme + cinema.nrFilme;
     nouCinema.filmeDifuzate = new Film[totalFilme];
-    for (int i = 0; i < this->nrFilme; i++) {
+    for (int i = 0; i < this->nrFilme; i++)
+    {
         nouCinema.filmeDifuzate[i] = this->filmeDifuzate[i];
     }
     int nouFilmeCount = this->nrFilme;
-    for (int i = 0; i < cinema.nrFilme; i++) {
+    for (int i = 0; i < cinema.nrFilme; i++)
+    {
         bool duplicateFound = false;
-        for (int j = 0; j < nouFilmeCount; j++) {
-            if (nouCinema.filmeDifuzate[j].getNumeFilm() == cinema.filmeDifuzate[i].getNumeFilm() && nouCinema.filmeDifuzate[j].getRating() == cinema.filmeDifuzate[i].getRating()) {
+        for (int j = 0; j < nouFilmeCount; j++)
+        {
+            if (nouCinema.filmeDifuzate[j].getNumeFilm() == cinema.filmeDifuzate[i].getNumeFilm()
+                && nouCinema.filmeDifuzate[j].getRating() == cinema.filmeDifuzate[i].getRating())
+            {
                 duplicateFound = true;
                 break;
             }
         }
-        if (!duplicateFound) {
+        if (!duplicateFound)
+        {
             nouCinema.filmeDifuzate[nouFilmeCount++] = cinema.filmeDifuzate[i];
         }
     }

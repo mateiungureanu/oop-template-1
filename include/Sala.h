@@ -35,6 +35,15 @@ public:
     [[nodiscard]] int
     getIdSala() const;
 
+    [[nodiscard]] int
+    getNrLocuri() const;
+
+    [[nodiscard]] int
+    getNrRanduri() const;
+
+    [[nodiscard]] int
+    getNrColoane() const;
+
     [[nodiscard]] bool *
     getLocuriOcupate() const;
 };

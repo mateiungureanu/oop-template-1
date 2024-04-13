@@ -14,7 +14,7 @@ private:
 public:
     Bilet_4Dx(int rand, int coloana, bool scaunMiscator, bool scaunSuflator);
 
-    explicit Bilet_4Dx(int rand = 0, int coloana = 0);
+    explicit Bilet_4Dx(int rand, int coloana); // = 0, = 0, nu mai stiu pentru ce erau dar merge si fara aparent
 
     Bilet_4Dx();
 
@@ -42,9 +42,6 @@ public:
 
     Bilet_4Dx &
     operator=(const Bilet_4Dx &aux);
-
-    void
-    functieUpCast() override;
 
     void
     afiseaza() override;

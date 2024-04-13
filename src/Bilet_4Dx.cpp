@@ -8,9 +8,9 @@ Bilet_4Dx::Bilet_4Dx(int rand, int coloana, bool scaunMiscator, bool scaunSuflat
                                                                                       pret4Dx(45) {}
 
 Bilet_4Dx::Bilet_4Dx(int rand, int coloana) : Bilet_Normal(rand, coloana),
-                                                      scaunMiscator(true),
-                                                      scaunSuflator(true),
-                                                      pret4Dx(45) {}
+                                              scaunMiscator(true),
+                                              scaunSuflator(true),
+                                              pret4Dx(45) {}
 
 Bilet_4Dx::Bilet_4Dx() : Bilet_Normal(), scaunMiscator(true), scaunSuflator(true), pret4Dx(45) {}
 
@@ -69,13 +69,6 @@ Bilet_4Dx::operator=(const Bilet_4Dx &aux)
     this->scaunMiscator = aux.scaunMiscator;
     this->scaunSuflator = aux.scaunSuflator;
     return *this;
-}
-
-void
-Bilet_4Dx::functieUpCast()
-{
-    Bilet_Normal *basePtr = this;
-    std::cout << "Rand: " << basePtr->getRand() << ", Coloana: " << basePtr->getColoana() << std::endl;
 }
 
 void
