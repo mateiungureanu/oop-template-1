@@ -28,8 +28,8 @@ Bilet_Normal::setColoana(int coloana1)
     this->coloana = coloana1;
 }
 
-// cppcheck-suppress unusedFunction
 void
+// cppcheck-suppress unusedFunction
 Bilet_Normal::setPret(int pret1)
 {
     this->pret = pret1;
