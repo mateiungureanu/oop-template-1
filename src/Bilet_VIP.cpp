@@ -74,8 +74,8 @@ Bilet_VIP::operator=(const Bilet_VIP &aux)
 void
 Bilet_VIP::afiseaza()
 {
-    std::cout << "Bilet VIP    | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << pretVIP
-              << " | Bonus-uri VIP:";
+    Bilet_Normal::afiseaza();
+    std::cout << " | Bonus-uri VIP:";
     if (popcornGratis)
     {
         std::cout << " popcorn_gratis";

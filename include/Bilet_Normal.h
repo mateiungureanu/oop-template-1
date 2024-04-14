@@ -10,10 +10,8 @@ class Bilet_Normal
 protected:
     int rand;
     int coloana;
-    int pret;
+    const int pret = 25;
 public:
-    friend class Cinema;
-
     Bilet_Normal(int rand, int coloana);
 
     Bilet_Normal();
@@ -25,9 +23,6 @@ public:
 
     void
     setColoana(int coloana1);
-
-    void
-    setPret(int pret1);
 
     [[nodiscard]] int
     getRand() const;

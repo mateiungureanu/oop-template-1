@@ -155,11 +155,6 @@ add_executable(
         ${HEADERS}
         ${TESTS}
         ${SOURCES}
-        src/Sala.cpp
-        src/Cinema.cpp
-        src/Bilet_Normal.cpp
-        src/Bilet_4Dx.cpp
-        src/Bilet_VIP.cpp
 )
 
 target_link_libraries(

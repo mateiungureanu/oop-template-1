@@ -293,8 +293,7 @@ TEST(BiletNormalSetterGetter, ColoanaSetterGetter)
 TEST(BiletNormalSetterGetter, PretSetterGetter)
 {
     Bilet_Normal bilet;
-    bilet.setPret(30);
-    EXPECT_EQ(30, bilet.getPret());
+    EXPECT_EQ(25, bilet.getPret());
 }
 
 TEST(BiletNormalCopyConstructor, CopyConstructor)

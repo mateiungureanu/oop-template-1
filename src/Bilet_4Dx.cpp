@@ -74,8 +74,8 @@ Bilet_4Dx::operator=(const Bilet_4Dx &aux)
 void
 Bilet_4Dx::afiseaza()
 {
-    std::cout << "Bilet 4Dx    | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << pret4Dx
-              << " | Bonus-uri 4Dx:";
+    Bilet_Normal::afiseaza();
+    std::cout << " | Bonus-uri 4Dx:";
     if (scaunMiscator)
     {
         std::cout << " scaun_miscator";

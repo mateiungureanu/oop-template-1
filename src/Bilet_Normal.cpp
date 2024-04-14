@@ -1,19 +1,18 @@
 #include "Bilet_Normal.h"
 
 #include <memory>
+#include <iomanip>
 
 Bilet_Normal::Bilet_Normal(int rand, int coloana)
 {
     this->rand = rand;
     this->coloana = coloana;
-    this->pret = 25;
 }
 
 Bilet_Normal::Bilet_Normal()
 {
     this->rand = 0;
     this->coloana = 0;
-    this->pret = 25;
 }
 
 void
@@ -26,12 +25,6 @@ void
 Bilet_Normal::setColoana(int coloana1)
 {
     this->coloana = coloana1;
-}
-
-// cppcheck-suppress unusedFunction
-void Bilet_Normal::setPret(int pret1)
-{
-    this->pret = pret1;
 }
 
 [[nodiscard]] int
@@ -56,7 +49,6 @@ Bilet_Normal::Bilet_Normal(const Bilet_Normal &aux)
 {
     this->rand = aux.rand;
     this->coloana = aux.coloana;
-    this->pret = aux.pret;
 }
 
 Bilet_Normal &
@@ -68,15 +60,13 @@ Bilet_Normal::operator=(const Bilet_Normal &aux)
     }
     this->rand = aux.rand;
     this->coloana = aux.coloana;
-    this->pret = aux.pret;
     return *this;
 }
 
 void
 Bilet_Normal::afiseaza()
 {
-    std::cout << "Bilet Normal | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << pret;
-}
+    std::cout << "Bilet " << std::setw(6) << std::left << getType() << " | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << getPret();}
 
 std::string
 Bilet_Normal::getType()
