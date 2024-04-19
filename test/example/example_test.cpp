@@ -323,10 +323,11 @@ TEST(BiletNormalGetType, GetTypeFunction)
 
 TEST(BiletNormalDowngradeBilet, DowngradeBiletFunction)
 {
-    std::unique_ptr<Bilet_Normal> biletPtr = Bilet_Normal::downgradeBilet(4, 8);
+    Bilet_Normal* biletPtr = Bilet_Normal::downgradeBilet(4, 8);
     EXPECT_EQ(4, biletPtr->getRand());
     EXPECT_EQ(8, biletPtr->getColoana());
     EXPECT_EQ(25, biletPtr->getPret());
+    delete biletPtr;
 }
 
 TEST(Bilet4DxConstructor, ParameterizedConstructorWithScaunMiscatorSuflator)
@@ -411,12 +412,13 @@ TEST(Bilet4DxGetType, GetTypeFunction)
 
 TEST(Bilet4DxUpgradeBilet4Dx, UpgradeBilet4DxFunction)
 {
-    std::unique_ptr<Bilet_4Dx> biletPtr = Bilet_4Dx::upgradeBilet4Dx(4, 8);
+    Bilet_4Dx* biletPtr = Bilet_4Dx::upgradeBilet4Dx(4, 8);
     EXPECT_EQ(4, biletPtr->getRand());
     EXPECT_EQ(8, biletPtr->getColoana());
     EXPECT_TRUE(biletPtr->getScaunMiscator());
     EXPECT_TRUE(biletPtr->getScaunSuflator());
     EXPECT_EQ(45, biletPtr->getPret());
+    delete biletPtr;
 }
 
 TEST(BiletVIPConstructor, ParameterizedConstructorWithPopcornBauturiGratis)
@@ -499,12 +501,13 @@ TEST(BiletVIPGetType, GetTypeFunction)
     EXPECT_EQ("VIP", bilet.getType());
 }
 
-TEST(BiletVIPUpgradeBilet4Dx, UpgradeBiletVIPFunction)
+TEST(BiletVIPUpgradeBiletVIP, UpgradeBiletVIPFunction)
 {
-    std::unique_ptr<Bilet_VIP> biletPtr = Bilet_VIP::upgradeBiletVIP(4, 8);
+    Bilet_VIP* biletPtr = Bilet_VIP::upgradeBiletVIP(4, 8);
     EXPECT_EQ(4, biletPtr->getRand());
     EXPECT_EQ(8, biletPtr->getColoana());
     EXPECT_TRUE(biletPtr->getPopcornGratis());
     EXPECT_TRUE(biletPtr->getBauturiGratis());
     EXPECT_EQ(60, biletPtr->getPret());
+    delete biletPtr;
 }

@@ -92,8 +92,8 @@ Bilet_4Dx::getType()
     return "4Dx";
 }
 
-std::unique_ptr<Bilet_4Dx>
+Bilet_4Dx *
 Bilet_4Dx::upgradeBilet4Dx(int rand1, int coloana1)
 {
-    return std::make_unique<Bilet_4Dx>(rand1, coloana1);
+    return new Bilet_4Dx(rand1, coloana1);
 }

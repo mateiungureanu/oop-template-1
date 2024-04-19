@@ -2,13 +2,12 @@
 #include <array>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <memory>
 #include <iomanip>
 
 #include "Sala.h"
 #include "Cinema.h"
 #include "Film.h"
+#include "Bilet.h"
 #include "Bilet_Normal.h"
 #include "Bilet_4Dx.h"
 #include "Bilet_VIP.h"
@@ -67,10 +66,10 @@ main()
     };
     Sala *S1 = new Sala(1);
     Sala *S2 = new Sala(2);
-    std::array<std::unique_ptr<Bilet_Normal>, 63> bilete{};
-    for (int i = 0; i < 63; ++i)
+    std::vector<Bilet*> bilete;
+    for (int i = 0; i<63; ++i)
     {
-        bilete[i] = std::make_unique<Bilet_Normal>(0, 0);
+        bilete.emplace_back(new Bilet_Normal);
     }
     std::cout << "\nBine ati venit la Cinema Multiplex!\n";
 client_sau_admin:
@@ -220,8 +219,9 @@ client_sau_admin:
                     goto citeste_ora;
                 }
                 nr_bilete--;
-                bilete[nr_bilete]->setRand(0);
-                bilete[nr_bilete]->setColoana(0);
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+                bilet_normal->setRand(0);
+                bilet_normal->setColoana(0);
                 goto citeste_loc;
             }
             if (x < 0 || y < 0 || x == 9 || x > 10 || y > 10 || (x == 10 && y != 10) || (x == 0 && y != 0)
@@ -240,9 +240,10 @@ client_sau_admin:
                 std::cout << "\nLocul este deja ales de dvs.\n";
                 goto citeste_loc;
             }
-            bilete[nr_bilete]->setRand(x);
-            bilete[nr_bilete]->setColoana(y);
-            loc[(bilete[nr_bilete]->getRand() - 1) * 9 + (bilete[nr_bilete]->getColoana() - 1)] = 2;
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+            bilet_normal->setRand(x);
+            bilet_normal->setColoana(y);
+            loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 2;
             nr_bilete++;
             k = 0;
             std::cout << "\nLocurile alese de dvs. sunt cele marcate cu 2:\n";
@@ -263,7 +264,8 @@ client_sau_admin:
                 std::cout << i + 1 << "  ";
                 for (int j = 0; j < 9; ++j)
                 {
-                    if (bilete[k]->getRand() == i + 1 and bilete[k]->getColoana() == j + 1 and k < nr_bilete)
+                    bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[k]);
+                    if (bilet_normal->getRand() == i + 1 and bilet_normal->getColoana() == j + 1 and k < nr_bilete)
                     {
                         ++k;
                         std::cout << "2 ";
@@ -278,14 +280,16 @@ client_sau_admin:
         }
         for (int i = 0; i < nr_bilete; ++i)
         {
-            loc[(bilete[i]->getRand() - 1) * 9 + (bilete[i]->getColoana() - 1)] = 1;
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+            loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 1;
         }
     upgrade_bilet:
         std::cout << "\nBiletele dvs. sunt urmatoarele:\n";
         for (int i = 0; i < nr_bilete; ++i)
         {
             std::cout << i + 1 << ".";
-            bilete[i]->afiseaza();
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+            bilet_normal->afiseaza();
             std::cout << std::endl;
         }
         std::cout
@@ -307,7 +311,8 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                bilete[i]->afiseaza();
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
             f >> tasta;
@@ -326,8 +331,8 @@ client_sau_admin:
             }
             if (bilete[index]->getType() == std::string("Normal"))
             {
-                Bilet_Normal *pNormal = bilete[index].get();
-                bilete[index] = Bilet_4Dx::upgradeBilet4Dx(pNormal->getRand(), pNormal->getColoana());
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
+                bilete[index] = Bilet_4Dx::upgradeBilet4Dx(bilet_normal->getRand(), bilet_normal->getColoana());
                 std::cout << ". Biletul a fost upgradat la 4Dx.\n";
                 goto upgrade_bilet;
             }
@@ -338,7 +343,8 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                bilete[i]->afiseaza();
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
             f >> tasta;
@@ -357,7 +363,7 @@ client_sau_admin:
             if (bilete[index]->getType() == "4Dx")
             {
                 std::cout << "\nApasati tasta corespunzatoare:\n1.";
-                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index].get());
+                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index]);
                 if (p4Dx->getScaunMiscator())
                 {
                     std::cout << "adauga";
@@ -419,7 +425,8 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                bilete[i]->afiseaza();
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
             f >> tasta;
@@ -438,8 +445,8 @@ client_sau_admin:
             }
             if (bilete[index]->getType() == std::string("Normal"))
             {
-                Bilet_Normal *pNormal = bilete[index].get();
-                bilete[index] = Bilet_VIP::upgradeBiletVIP(pNormal->getRand(), pNormal->getColoana());
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
+                bilete[index] = Bilet_VIP::upgradeBiletVIP(bilet_normal->getRand(), bilet_normal->getColoana());
                 std::cout << ". Biletul a fost upgradat la VIP.\n";
                 goto upgrade_bilet;
             }
@@ -450,7 +457,8 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                bilete[i]->afiseaza();
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
             f >> tasta;
@@ -469,7 +477,7 @@ client_sau_admin:
             if (bilete[index]->getType() == "VIP")
             {
                 std::cout << "\nApasati tasta corespunzatoare:\n1.";
-                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index].get());
+                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
                 if (pVIP->getPopcornGratis())
                 {
                     std::cout << "adauga";
@@ -531,7 +539,8 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                bilete[i]->afiseaza();
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
             f >> tasta;
@@ -549,14 +558,14 @@ client_sau_admin:
             }
             if (bilete[index]->getType() == "4Dx")
             {
-                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index].get());
+                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index]);
                 bilete[index] = Bilet_Normal::downgradeBilet(p4Dx->getRand(), p4Dx->getColoana());
                 std::cout << ". Biletul a fost downgradat la Normal.\n";
                 goto upgrade_bilet;
             }
             if (bilete[index]->getType() == "VIP")
             {
-                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index].get());
+                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
                 bilete[index] = Bilet_Normal::downgradeBilet(pVIP->getRand(), pVIP->getColoana());
                 std::cout << ". Biletul a fost downgradat la Normal.\n";
                 goto upgrade_bilet;
@@ -565,7 +574,8 @@ client_sau_admin:
     plata:
         for (int i = 0; i < nr_bilete; ++i)
         {
-            suma += bilete[i]->getPret();
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+            suma += bilet_normal->getPret();
         }
         std::cout << "\nDe platit: " << suma << " lei\nNumarul cardului [12 cifre]: ";
         f.get();
@@ -582,12 +592,13 @@ client_sau_admin:
         std::cout << ccv << "\n";
         if (nr_bilete == 1)
         {
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[0]);
             std::cout << "\n\nCodul biletului dvs. este: C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O"
-                      << cod_ora << "|S" << cod_sala << "|R" << bilete[0]->getRand() << "|C" << bilete[0]->getColoana()
-                      << "|B" << bilete[0]->getType();
+                      << cod_ora << "|S" << cod_sala << "|R" << bilet_normal->getRand() << "|C" << bilet_normal->getColoana()
+                      << "|B" << bilet_normal->getType();
             if (bilete[0]->getType() == "4Dx")
             {
-                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[0].get());
+                auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[0]);
                 std::cout << "|P";
                 if (p4Dx->getScaunMiscator())
                     std::cout << "SM";
@@ -600,7 +611,7 @@ client_sau_admin:
             }
             if (bilete[0]->getType() == "VIP")
             {
-                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[0].get());
+                auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[0]);
                 std::cout << "|P";
                 if (pVIP->getPopcornGratis())
                     std::cout << "PG";
@@ -618,12 +629,13 @@ client_sau_admin:
             std::cout << "\n\nCodurile biletelor dvs. sunt:\n";
             for (int i = 0; i < nr_bilete; ++i)
             {
+                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
                 std::cout << "C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O" << cod_ora << "|S"
-                          << cod_sala << "|R" << bilete[i]->getRand() << "|C" << bilete[i]->getColoana() << "|B"
-                          << bilete[i]->getType();
+                          << cod_sala << "|R" << bilet_normal->getRand() << "|C" << bilet_normal->getColoana() << "|B"
+                          << bilet_normal->getType();
                 if (bilete[i]->getType() == "4Dx")
                 {
-                    auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[i].get());
+                    auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[i]);
                     std::cout << "|P";
                     if (p4Dx->getScaunMiscator())
                         std::cout << "SM";
@@ -637,7 +649,7 @@ client_sau_admin:
                 if (bilete[i]->getType() == "VIP")
                 {
 
-                    auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[i].get());
+                    auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[i]);
                     std::cout << "|P";
                     if (pVIP->getPopcornGratis())
                         std::cout << "PG";
@@ -760,5 +772,10 @@ exit:
     delete S1;
     delete S2;
     delete[] filme;
+    for (Bilet* bilet : bilete)
+    {
+        delete bilet;
+    }
+    bilete.clear();
     return 0;
 }

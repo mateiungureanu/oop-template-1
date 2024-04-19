@@ -92,8 +92,8 @@ Bilet_VIP::getType()
     return "VIP";
 }
 
-std::unique_ptr<Bilet_VIP>
+Bilet_VIP *
 Bilet_VIP::upgradeBiletVIP(int rand1, int coloana1)
 {
-    return std::make_unique<Bilet_VIP>(rand1, coloana1);
+    return new Bilet_VIP(rand1, coloana1);
 }

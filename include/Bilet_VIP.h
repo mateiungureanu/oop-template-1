@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 #include "Bilet_Normal.h"
 
 class Bilet_VIP : public Bilet_Normal
@@ -21,13 +22,13 @@ public:
     ~Bilet_VIP() override = default;
 
     void
-    setPretVIP(int pretVIP1);
-
-    void
     setPopcornGratis(bool popcornGratis1);
 
     void
     setBauturiGratis(bool bauturiGratis1);
+
+    void
+    setPretVIP(int pretVIP1);
 
     [[nodiscard]] bool
     getPopcornGratis() const;
@@ -49,7 +50,7 @@ public:
     [[nodiscard]] std::string
     getType() override;
 
-    static std::unique_ptr<Bilet_VIP>
+    static Bilet_VIP *
     upgradeBiletVIP(int rand1, int coloana1);
 };
 

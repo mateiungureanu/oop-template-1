@@ -4,8 +4,9 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include "Bilet.h"
 
-class Bilet_Normal
+class Bilet_Normal : public Bilet
 {
 protected:
     int rand;
@@ -16,7 +17,7 @@ public:
 
     Bilet_Normal();
 
-    virtual ~Bilet_Normal() = default;
+    ~Bilet_Normal() override = default;
 
     void
     setRand(int rand1);
@@ -41,11 +42,11 @@ public:
     virtual void
     afiseaza();
 
-    virtual std::string
-    getType();
+    std::string
+    getType() override;
 
-    static std::unique_ptr<Bilet_Normal>
-    downgradeBilet(int rand, int coloana);
+    static Bilet_Normal *
+    downgradeBilet(int rand1, int coloana1);
 };
 
 #endif

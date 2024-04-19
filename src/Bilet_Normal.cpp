@@ -1,6 +1,5 @@
 #include "Bilet_Normal.h"
 
-#include <memory>
 #include <iomanip>
 
 Bilet_Normal::Bilet_Normal(int rand, int coloana)
@@ -66,7 +65,9 @@ Bilet_Normal::operator=(const Bilet_Normal &aux)
 void
 Bilet_Normal::afiseaza()
 {
-    std::cout << "Bilet " << std::setw(6) << std::left << getType() << " | Rand: " << rand << ", Loc: " << coloana << " | Pret: " << getPret();}
+    std::cout << "Bilet " << std::setw(6) << std::left << getType() << " | Rand: " << rand << ", Loc: " << coloana
+              << " | Pret: " << getPret();
+}
 
 std::string
 Bilet_Normal::getType()
@@ -74,8 +75,8 @@ Bilet_Normal::getType()
     return "Normal";
 }
 
-std::unique_ptr<Bilet_Normal>
+Bilet_Normal *
 Bilet_Normal::downgradeBilet(int rand1, int coloana1)
 {
-    return std::make_unique<Bilet_Normal>(rand1, coloana1);
+    return new Bilet_Normal(rand1, coloana1);
 }

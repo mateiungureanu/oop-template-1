@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 #include "Bilet_Normal.h"
 
 class Bilet_4Dx : public Bilet_Normal
@@ -49,7 +50,7 @@ public:
     [[nodiscard]] std::string
     getType() override;
 
-    static std::unique_ptr<Bilet_4Dx>
+    static Bilet_4Dx *
     upgradeBilet4Dx(int rand1, int coloana1);
 };
 
