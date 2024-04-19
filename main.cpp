@@ -333,6 +333,7 @@ client_sau_admin:
             {
                 auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
                 bilete[index] = Bilet_4Dx::upgradeBilet4Dx(bilet_normal->getRand(), bilet_normal->getColoana());
+                delete bilet_normal;
                 std::cout << ". Biletul a fost upgradat la 4Dx.\n";
                 goto upgrade_bilet;
             }
@@ -447,6 +448,7 @@ client_sau_admin:
             {
                 auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
                 bilete[index] = Bilet_VIP::upgradeBiletVIP(bilet_normal->getRand(), bilet_normal->getColoana());
+                delete bilet_normal;
                 std::cout << ". Biletul a fost upgradat la VIP.\n";
                 goto upgrade_bilet;
             }
@@ -560,6 +562,7 @@ client_sau_admin:
             {
                 auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index]);
                 bilete[index] = Bilet_Normal::downgradeBilet(p4Dx->getRand(), p4Dx->getColoana());
+                delete p4Dx;
                 std::cout << ". Biletul a fost downgradat la Normal.\n";
                 goto upgrade_bilet;
             }
@@ -567,6 +570,7 @@ client_sau_admin:
             {
                 auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
                 bilete[index] = Bilet_Normal::downgradeBilet(pVIP->getRand(), pVIP->getColoana());
+                delete pVIP;
                 std::cout << ". Biletul a fost downgradat la Normal.\n";
                 goto upgrade_bilet;
             }
