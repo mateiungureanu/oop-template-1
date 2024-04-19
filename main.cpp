@@ -367,22 +367,22 @@ client_sau_admin:
                 auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index]);
                 if (p4Dx->getScaunMiscator())
                 {
-                    std::cout << "adauga";
+                    std::cout << "elimina";
                 }
                 else
                 {
-                    std::cout << "elimina";
+                    std::cout << "adauga";
                 }
-                std::cout << " scaun_miscator\n2.";
+                std::cout << " scaun_miscator (10 lei)\n2.";
                 if (p4Dx->getScaunSuflator())
                 {
-                    std::cout << "adauga";
+                    std::cout << "elimina";
                 }
                 else
                 {
-                    std::cout << "elimina";
+                    std::cout << "adauga";
                 }
-                std::cout << " scaun_suflator\n";
+                std::cout << " scaun_suflator (10 lei)\n";
                 f >> tasta;
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
@@ -482,22 +482,22 @@ client_sau_admin:
                 auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
                 if (pVIP->getPopcornGratis())
                 {
-                    std::cout << "adauga";
+                    std::cout << "elimina";
                 }
                 else
                 {
-                    std::cout << "elimina";
+                    std::cout << "adauga";
                 }
-                std::cout << " popcorn_gratis\n2.";
+                std::cout << " popcorn_gratis (25 lei)\n2.";
                 if (pVIP->getBauturiGratis())
                 {
-                    std::cout << "adauga";
+                    std::cout << "elimina";
                 }
                 else
                 {
-                    std::cout << "elimina";
+                    std::cout << "adauga";
                 }
-                std::cout << " bauturi_gratis\n";
+                std::cout << " bauturi_gratis (10 lei)\n";
                 f >> tasta;
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
