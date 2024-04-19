@@ -280,7 +280,7 @@ client_sau_admin:
         }
         for (int i = 0; i < nr_bilete; ++i)
         {
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
             loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 1;
         }
     upgrade_bilet:
