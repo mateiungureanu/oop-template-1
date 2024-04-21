@@ -30,8 +30,7 @@ conversie(std::istream &f)
 {
     std::string tasta;
     f >> tasta;
-    // cppcheck-suppress ignoredReturnValue
-    std::stoi(tasta);
+    (void) std::stoi(tasta);
     return tasta;
 }
 
@@ -46,7 +45,7 @@ conversieExtinsa(std::istream &f)
             tasta = conversie(f);
             return tasta;
         }
-        catch (const std::exception &e)
+        catch (const std::exception&)
         {
             std::cout << "\nVa rugam apasati o tasta valida.\n";
         }
