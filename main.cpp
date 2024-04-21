@@ -25,6 +25,33 @@ operator==(const Cinema &cinema, const Cinema &aux)
     }
 }
 
+std::string
+conversie(std::istream &f)
+{
+    std::string tasta;
+    f >> tasta;
+    std::stoi(tasta);
+    return tasta;
+}
+
+std::string
+conversieExtinsa(std::istream &f)
+{
+    std::string tasta;
+    while (true)
+    {
+        try
+        {
+            tasta = conversie(f);
+            return tasta;
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
+        }
+    }
+}
+
 int
 main()
 {
@@ -66,8 +93,8 @@ main()
     };
     Sala *S1 = new Sala(1);
     Sala *S2 = new Sala(2);
-    std::vector<Bilet*> bilete;
-    for (int i = 0; i<63; ++i)
+    std::vector<Bilet *> bilete;
+    for (int i = 0; i < 63; ++i)
     {
         bilete.emplace_back(new Bilet_Normal);
     }
@@ -75,7 +102,7 @@ main()
 client_sau_admin:
     std::cout
         << "\nPentru a cumpara un bilet de film apasati tasta 1.\n[admin] Pentru a va loga apasati tasta 2.\nPentru a iesi apasati tasta 0.\n";
-    f >> tasta;
+    tasta = conversieExtinsa(f);
     if (std::stoi(tasta) == 0)
     {
         goto exit;
@@ -90,7 +117,7 @@ client_sau_admin:
         std::cout << "\nVa rugam completati campurile de mai jos.\n\n";
     citeste_cinema:
         std::cout << "\nApasati tasta corespunzatoare mall-ului dorit:\n1.Afi Cotroceni\n2.Park Lake\n3.Mega Mall\n";
-        f >> tasta;
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) == 0)
         {
             goto client_sau_admin;
@@ -110,7 +137,7 @@ client_sau_admin:
                       << std::setprecision(1) << cinemauri[0].getFilmeDifuzate()[i].getRating() << ")\n";
         }
         std::cout << "Apasati tasta 0 pentru a merge inapoi.\n";
-        f >> tasta;
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) == 0)
         {
             goto citeste_cinema;
@@ -132,7 +159,7 @@ client_sau_admin:
     citeste_zi:
         std::cout
             << "\nApasati tasta corespunzatoare zilei dorite:\n1.Luni\n2.Marti\n3.Miercuri\n4.Joi\n5.Vineri\n6.Sambata\n7.Duminica\nApasati tasta 0 pentru a merge inapoi.\n";
-        f >> tasta;
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) == 0)
         {
             goto citeste_film;
@@ -147,7 +174,7 @@ client_sau_admin:
     citeste_ora:
         std::cout
             << "\nApasati tasta corespunzatoare orei dorite:\n1.10:30\n2.12:00\n3.13:30\n4.15:00\n5.16:30\n6.18:00\n7.19:30\n8.21:00\n9.22:30\nApasati tasta 0 pentru a merge inapoi.\n";
-        f >> tasta;
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) == 0)
         {
             goto citeste_zi;
@@ -207,7 +234,8 @@ client_sau_admin:
             {
                 std::cout << "Apasati de 2 ori tasta 10 pentru a continua cu plata.\n";
             }
-            f >> x >> y;
+            x = std::stoi(conversieExtinsa(f));
+            y = std::stoi(conversieExtinsa(f));
             if (x == 10 && y == 10)
             {
                 break;
@@ -219,7 +247,7 @@ client_sau_admin:
                     goto citeste_ora;
                 }
                 nr_bilete--;
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[nr_bilete]);
                 bilet_normal->setRand(0);
                 bilet_normal->setColoana(0);
                 goto citeste_loc;
@@ -240,7 +268,7 @@ client_sau_admin:
                 std::cout << "\nLocul este deja ales de dvs.\n";
                 goto citeste_loc;
             }
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[nr_bilete]);
+            auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[nr_bilete]);
             bilet_normal->setRand(x);
             bilet_normal->setColoana(y);
             loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 2;
@@ -264,7 +292,7 @@ client_sau_admin:
                 std::cout << i + 1 << "  ";
                 for (int j = 0; j < 9; ++j)
                 {
-                    bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[k]);
+                    bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[k]);
                     if (bilet_normal->getRand() == i + 1 and bilet_normal->getColoana() == j + 1 and k < nr_bilete)
                     {
                         ++k;
@@ -280,7 +308,7 @@ client_sau_admin:
         }
         for (int i = 0; i < nr_bilete; ++i)
         {
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+            auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
             loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 1;
         }
     upgrade_bilet:
@@ -288,13 +316,13 @@ client_sau_admin:
         for (int i = 0; i < nr_bilete; ++i)
         {
             std::cout << i + 1 << ".";
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+            auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
             bilet_normal->afiseaza();
             std::cout << std::endl;
         }
         std::cout
             << "\nDoriti sa upgradati sau sa downgradati un bilet? Apasati tasta corespunzatoare:\n1.Nu, multumesc (mergeti la plata)\n2.Vreau sa upgradez un bilet normal la bilet 4DX (45 lei)\n3.Vreau sa adaug/elimin beneficii pentru un bilet 4Dx\n4.Vreau sa upgradez un bilet normal la bilet VIP (60 lei)\n5.Vreau sa adaug/elimin beneficii pentru un bilet VIP\n6.Vreau sa downgradez un bilet 4Dx sau VIP la bilet normal (25 lei)\n";
-        f >> tasta;
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) < 1 || std::stoi(tasta) > 6)
         {
             std::cout << "\nVa rugam apasati o tasta valida.\n";
@@ -311,11 +339,11 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
-            f >> tasta;
+            tasta = conversieExtinsa(f);
             index = std::stoi(tasta) - 1;
             if (index >= nr_bilete || index < 0)
             {
@@ -331,7 +359,7 @@ client_sau_admin:
             }
             if (bilete[index]->getType() == std::string("Normal"))
             {
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[index]);
                 bilete[index] = Bilet_4Dx::upgradeBilet4Dx(bilet_normal->getRand(), bilet_normal->getColoana());
                 delete bilet_normal;
                 std::cout << ". Biletul a fost upgradat la 4Dx.\n";
@@ -344,11 +372,11 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
-            f >> tasta;
+            tasta = conversieExtinsa(f);
             index = std::stoi(tasta) - 1;
             if (index >= nr_bilete || index < 0)
             {
@@ -383,7 +411,7 @@ client_sau_admin:
                     std::cout << "adauga";
                 }
                 std::cout << " scaun_suflator (10 lei)\n";
-                f >> tasta;
+                tasta = conversieExtinsa(f);
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
                 {
@@ -426,11 +454,11 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
-            f >> tasta;
+            tasta = conversieExtinsa(f);
             index = std::stoi(tasta) - 1;
             if (index >= nr_bilete || index < 0)
             {
@@ -446,7 +474,7 @@ client_sau_admin:
             }
             if (bilete[index]->getType() == std::string("Normal"))
             {
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[index]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[index]);
                 bilete[index] = Bilet_VIP::upgradeBiletVIP(bilet_normal->getRand(), bilet_normal->getColoana());
                 delete bilet_normal;
                 std::cout << ". Biletul a fost upgradat la VIP.\n";
@@ -459,11 +487,11 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
-            f >> tasta;
+            tasta = conversieExtinsa(f);
             index = std::stoi(tasta) - 1;
             if (index >= nr_bilete || index < 0)
             {
@@ -498,7 +526,7 @@ client_sau_admin:
                     std::cout << "adauga";
                 }
                 std::cout << " bauturi_gratis (10 lei)\n";
-                f >> tasta;
+                tasta = conversieExtinsa(f);
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
                 {
@@ -541,11 +569,11 @@ client_sau_admin:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
-            f >> tasta;
+            tasta = conversieExtinsa(f);
             index = std::stoi(tasta) - 1;
             if (index >= nr_bilete || index < 0)
             {
@@ -578,7 +606,7 @@ client_sau_admin:
     plata:
         for (int i = 0; i < nr_bilete; ++i)
         {
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+            auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
             suma += bilet_normal->getPret();
         }
         std::cout << "\nDe platit: " << suma << " lei\nNumarul cardului [12 cifre]: ";
@@ -592,13 +620,14 @@ client_sau_admin:
         f >> data_exp;
         std::cout << data_exp << "\n";
         std::cout << "CCV [3 cifre]: ";
-        f >> ccv;
+        ccv = std::stoi(conversieExtinsa(f));
         std::cout << ccv << "\n";
         if (nr_bilete == 1)
         {
-            auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[0]);
+            auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[0]);
             std::cout << "\n\nCodul biletului dvs. este: C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O"
-                      << cod_ora << "|S" << cod_sala << "|R" << bilet_normal->getRand() << "|C" << bilet_normal->getColoana()
+                      << cod_ora << "|S" << cod_sala << "|R" << bilet_normal->getRand() << "|C"
+                      << bilet_normal->getColoana()
                       << "|B" << bilet_normal->getType();
             if (bilete[0]->getType() == "4Dx")
             {
@@ -633,7 +662,7 @@ client_sau_admin:
             std::cout << "\n\nCodurile biletelor dvs. sunt:\n";
             for (int i = 0; i < nr_bilete; ++i)
             {
-                auto* bilet_normal = dynamic_cast<Bilet_Normal*>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
                 std::cout << "C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O" << cod_ora << "|S"
                           << cod_sala << "|R" << bilet_normal->getRand() << "|C" << bilet_normal->getColoana() << "|B"
                           << bilet_normal->getType();
@@ -683,8 +712,9 @@ client_sau_admin:
         std::cout << parola;
         std::cout << "\n\nBuna, " << username;
     actiuni_admin:
-        std::cout << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
-        f >> tasta;
+        std::cout
+            << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
+        tasta = conversieExtinsa(f);
         if (std::stoi(tasta) == 0)
         {
             goto client_sau_admin;
@@ -736,7 +766,7 @@ client_sau_admin:
             f.get();
             std::string nouFilm;
             std::getline(f, nouFilm);
-            float nouRating;
+            double nouRating;
             f >> nouRating;
             index = -1;
             for (int i = 0; i < cinemauri[0].getNrFilme(); ++i)
@@ -776,7 +806,7 @@ exit:
     delete S1;
     delete S2;
     delete[] filme;
-    for (Bilet* bilet : bilete)
+    for (Bilet *bilet : bilete)
     {
         delete bilet;
     }
