@@ -11,6 +11,7 @@
 #include "Bilet_Normal.h"
 #include "Bilet_4Dx.h"
 #include "Bilet_VIP.h"
+#include "Bilet_Derivat.h"
 
 bool
 operator==(const Cinema &cinema, const Cinema &aux)
@@ -30,7 +31,7 @@ conversie(std::istream &f)
 {
     std::string tasta;
     f >> tasta;
-    (void) std::stoi(tasta);
+    (void)std::stoi(tasta);
     return tasta;
 }
 
@@ -40,12 +41,12 @@ conversieExtinsa(std::istream &f)
     std::string tasta;
     while (true)
     {
-           try
+        try
         {
             tasta = conversie(f);
             return tasta;
         }
-        catch (const std::exception&)
+        catch (const std::exception &)
         {
             std::cout << "\nVa rugam apasati o tasta valida.\n";
         }
@@ -321,9 +322,9 @@ client_sau_admin:
             std::cout << std::endl;
         }
         std::cout
-            << "\nDoriti sa upgradati sau sa downgradati un bilet? Apasati tasta corespunzatoare:\n1.Nu, multumesc (mergeti la plata)\n2.Vreau sa upgradez un bilet normal la bilet 4DX (45 lei)\n3.Vreau sa adaug/elimin beneficii pentru un bilet 4Dx\n4.Vreau sa upgradez un bilet normal la bilet VIP (60 lei)\n5.Vreau sa adaug/elimin beneficii pentru un bilet VIP\n6.Vreau sa downgradez un bilet 4Dx sau VIP la bilet normal (25 lei)\n";
+            << "\nDoriti sa upgradati sau sa downgradati un bilet? Apasati tasta corespunzatoare:\n1.Nu, multumesc (mergeti la plata)\n2.Vreau sa upgradez un bilet normal la bilet 4DX (45 lei)\n3.Vreau sa adaug/elimin beneficii pentru un bilet 4Dx\n4.Vreau sa upgradez un bilet normal la bilet VIP (60 lei)\n5.Vreau sa adaug/elimin beneficii pentru un bilet VIP\n6.Vreau sa upgradez un bilet normal la bilet Derivat (80 lei)\n7.Vreau sa adaug/elimin beneficii pentru un bilet Derivat\n8.Vreau sa downgradez un bilet 4Dx sau VIP sau Derivat la bilet normal (25 lei)\n";
         tasta = conversieExtinsa(f);
-        if (std::stoi(tasta) < 1 || std::stoi(tasta) > 6)
+        if (std::stoi(tasta) < 1 || std::stoi(tasta) > 8)
         {
             std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto upgrade_bilet;
@@ -351,7 +352,8 @@ client_sau_admin:
                 goto upgrade_bilet;
             }
             std::cout << "\nAti ales biletul " << tasta;
-            if (bilete[index]->getType() == "4Dx" || bilete[index]->getType() == "VIP")
+            if (bilete[index]->getType() == "4Dx" || bilete[index]->getType() == "VIP"
+                || bilete[index]->getType() == "Derivat")
             {
                 std::cout << ". Biletul nu poate fi upgradat pentru ca e un bilet " << bilete[index]->getType()
                           << ".\n";
@@ -368,7 +370,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) == 3)
         {
-            std::cout << "\nlegeti biletul 4Dx pentru care doriti sa adaugati/eliminati beneficii:\n";
+            std::cout << "\nAlegeti biletul 4Dx pentru care doriti sa adaugati/eliminati beneficii:\n";
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
@@ -384,7 +386,8 @@ client_sau_admin:
                 goto upgrade_bilet;
             }
             std::cout << "\nAti ales biletul " << tasta << ".\n";
-            if (bilete[index]->getType() == "Normal" || bilete[index]->getType() == "VIP")
+            if (bilete[index]->getType() == "Normal" || bilete[index]->getType() == "VIP"
+                || bilete[index]->getType() == "Derivat")
             {
                 std::cout << "Biletul nu poate fi modificat pentru ca nu e un bilet 4Dx.\n";
                 goto upgrade_bilet;
@@ -466,7 +469,8 @@ client_sau_admin:
                 goto upgrade_bilet;
             }
             std::cout << "\nAti ales biletul " << tasta;
-            if (bilete[index]->getType() == "4Dx" || bilete[index]->getType() == "VIP")
+            if (bilete[index]->getType() == "4Dx" || bilete[index]->getType() == "VIP"
+                || bilete[index]->getType() == "Derivat")
             {
                 std::cout << ". Biletul nu poate fi upgradat pentru ca e un bilet " << bilete[index]->getType()
                           << ".\n";
@@ -483,7 +487,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) == 5)
         {
-            std::cout << "\nlegeti biletul VIP pentru care doriti sa adaugati/eliminati beneficii:\n";
+            std::cout << "\nAlegeti biletul VIP pentru care doriti sa adaugati/eliminati beneficii:\n";
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
@@ -499,7 +503,8 @@ client_sau_admin:
                 goto upgrade_bilet;
             }
             std::cout << "\nAti ales biletul " << tasta << ".\n";
-            if (bilete[index]->getType() == "Normal" || bilete[index]->getType() == "4Dx")
+            if (bilete[index]->getType() == "Normal" || bilete[index]->getType() == "4Dx"
+                || bilete[index]->getType() == "Derivata")
             {
                 std::cout << "Biletul nu poate fi modificat pentru ca nu e un bilet VIP.\n";
                 goto upgrade_bilet;
@@ -542,7 +547,7 @@ client_sau_admin:
                     }
                     else
                     {
-                        pVIP->setBauturiGratis(true);
+                        pVIP->setPopcornGratis(true);
                         pVIP->setPretVIP(pVIP->getPret() + 25);
                     }
                 }
@@ -564,6 +569,123 @@ client_sau_admin:
             }
         }
         if (std::stoi(tasta) == 6)
+        {
+            std::cout << "\nAlegeti biletul pe care doriti sa il upgradati la Derivat:\n";
+            for (int i = 0; i < nr_bilete; ++i)
+            {
+                std::cout << i + 1 << ".";
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                bilet_normal->afiseaza();
+                std::cout << std::endl;
+            }
+            tasta = conversieExtinsa(f);
+            index = std::stoi(tasta) - 1;
+            if (index >= nr_bilete || index < 0)
+            {
+                std::cout << "\nVa rugam apasati o tasta intre 0 si numarul de bilete alese.\n";
+                goto upgrade_bilet;
+            }
+            std::cout << "\nAti ales biletul " << tasta;
+            if (bilete[index]->getType() == "4Dx" || bilete[index]->getType() == "VIP"
+                || bilete[index]->getType() == "Derivat")
+            {
+                std::cout << ". Biletul nu poate fi upgradat pentru ca e un bilet " << bilete[index]->getType()
+                          << ".\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == std::string("Normal"))
+            {
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[index]);
+                bilete[index] = Bilet_Derivat::upgradeBiletDerivat(bilet_normal->getRand(), bilet_normal->getColoana());
+                delete bilet_normal;
+                std::cout << ". Biletul a fost upgradat la Derivat.\n";
+                goto upgrade_bilet;
+            }
+        }
+        if (std::stoi(tasta) == 7)
+        {
+            std::cout << "\nAlegeti biletul Derivat pentru care doriti sa adaugati/eliminati beneficii:\n";
+            for (int i = 0; i < nr_bilete; ++i)
+            {
+                std::cout << i + 1 << ".";
+                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                bilet_normal->afiseaza();
+                std::cout << std::endl;
+            }
+            tasta = conversieExtinsa(f);
+            index = std::stoi(tasta) - 1;
+            if (index >= nr_bilete || index < 0)
+            {
+                std::cout << "\nVa rugam apasati o tasta intre 0 si numarul de bilete alese.\n";
+                goto upgrade_bilet;
+            }
+            std::cout << "\nAti ales biletul " << tasta << ".\n";
+            if (bilete[index]->getType() == "Normal" || bilete[index]->getType() == "4Dx"
+                || bilete[index]->getType() == "VIP")
+            {
+                std::cout << "Biletul nu poate fi modificat pentru ca nu e un bilet VIP.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == "Derivat")
+            {
+                std::cout << "\nApasati tasta corespunzatoare:\n1.";
+                auto *pDerivat = dynamic_cast<Bilet_Derivat *>(bilete[index]);
+                if (pDerivat->getA())
+                {
+                    std::cout << "elimina";
+                }
+                else
+                {
+                    std::cout << "adauga";
+                }
+                std::cout << " a (20 lei)\n2.";
+                if (pDerivat->getB())
+                {
+                    std::cout << "elimina";
+                }
+                else
+                {
+                    std::cout << "adauga";
+                }
+                std::cout << " b (20 lei)\n";
+                tasta = conversieExtinsa(f);
+                index = std::stoi(tasta);
+                if (index < 0 || index > 2)
+                {
+                    std::cout << "Va rugam apasati o tasta valida.";
+                    goto upgrade_bilet;
+                }
+                if (index == 1)
+                {
+                    if (pDerivat->getA())
+                    {
+                        pDerivat->setA(false);
+                        pDerivat->setPretDerivat(pDerivat->getPret() - 20);
+                    }
+                    else
+                    {
+                        pDerivat->setA(true);
+                        pDerivat->setPretDerivat(pDerivat->getPret() + 20);
+                    }
+                }
+                if (index == 2)
+                {
+                    if (pDerivat->getB())
+                    {
+                        pDerivat->setB(false);
+                        pDerivat->setPretDerivat(pDerivat->getPret() - 20);
+                    }
+                    else
+                    {
+                        pDerivat->setB(true);
+                        pDerivat->setPretDerivat(pDerivat->getPret() + 20);
+                    }
+                }
+                std::cout << "\nBeneficiile biletului Derivat au fost modificate.\n";
+                goto upgrade_bilet;
+            }
+        }
+        if (std::stoi(tasta) == 8)
         {
             std::cout << "\nAlegeti biletul pe care doriti sa il downgradati:\n";
             for (int i = 0; i < nr_bilete; ++i)
@@ -599,6 +721,14 @@ client_sau_admin:
                 auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
                 bilete[index] = Bilet_Normal::downgradeBilet(pVIP->getRand(), pVIP->getColoana());
                 delete pVIP;
+                std::cout << ". Biletul a fost downgradat la Normal.\n";
+                goto upgrade_bilet;
+            }
+            if (bilete[index]->getType() == "Derivat")
+            {
+                auto *pDerivat = dynamic_cast<Bilet_Derivat *>(bilete[index]);
+                bilete[index] = Bilet_Normal::downgradeBilet(pDerivat->getRand(), pDerivat->getColoana());
+                delete pDerivat;
                 std::cout << ". Biletul a fost downgradat la Normal.\n";
                 goto upgrade_bilet;
             }
@@ -655,6 +785,19 @@ client_sau_admin:
                 else
                     std::cout << "__";
             }
+            if (bilete[0]->getType() == "Derivat")
+            {
+                auto *pDerivat = dynamic_cast<Bilet_Derivat *>(bilete[0]);
+                std::cout << "|P";
+                if (pDerivat->getA())
+                    std::cout << "AA";
+                else
+                    std::cout << "__";
+                if (pDerivat->getB())
+                    std::cout << "BB";
+                else
+                    std::cout << "__";
+            }
             std::cout << "\n";
         }
         else
@@ -690,6 +833,20 @@ client_sau_admin:
                         std::cout << "__";
                     if (pVIP->getBauturiGratis())
                         std::cout << "BG";
+                    else
+                        std::cout << "__";
+                }
+                if (bilete[i]->getType() == "Derivat")
+                {
+
+                    auto *pDerivat = dynamic_cast<Bilet_Derivat *>(bilete[i]);
+                    std::cout << "|P";
+                    if (pDerivat->getA())
+                        std::cout << "AA";
+                    else
+                        std::cout << "__";
+                    if (pDerivat->getB())
+                        std::cout << "BB";
                     else
                         std::cout << "__";
                 }
