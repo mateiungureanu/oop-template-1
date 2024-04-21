@@ -30,6 +30,7 @@ conversie(std::istream &f)
 {
     std::string tasta;
     f >> tasta;
+    // cppcheck-suppress ignoredReturnValue
     std::stoi(tasta);
     return tasta;
 }
@@ -40,7 +41,7 @@ conversieExtinsa(std::istream &f)
     std::string tasta;
     while (true)
     {
-        try
+           try
         {
             tasta = conversie(f);
             return tasta;
