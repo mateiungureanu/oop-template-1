@@ -1,7 +1,5 @@
 #include "Film.h"
 
-#include <utility>
-
 Film::Film(std::string numeFilm, double rating)
 {
     this->numeFilm = std::move(numeFilm);
@@ -33,7 +31,7 @@ Film::getNumeFilm() const
     return numeFilm;
 }
 bool
-Film::operator==(const Film &film)
+Film::operator==(const Film &film) const
 {
     if (this->numeFilm == film.numeFilm and this->rating == film.rating)
         return true;
@@ -54,10 +52,10 @@ Film::operator=(const Film &aux)
 std::ostream &
 operator<<(std::ostream &out, const Film &film)
 {
-    out << "\nnume film: " << film.numeFilm;
-    out << "\nrating: " << film.rating;
+    out << "\nnume film: " << film.numeFilm << " (" << std::fixed << std::setprecision(1) << film.rating << ")";
     return out;
 }
+
 bool
 Film::comparaFilme(const Film &a, const Film &b)
 {

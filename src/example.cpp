@@ -1,5 +1,7 @@
-#include "example.h"
-
-int doSomething(int x) {
-    return x;
-}
+//#include "example.h"
+//
+//int
+//doSomething(int x)
+//{
+//    return x;
+//}
