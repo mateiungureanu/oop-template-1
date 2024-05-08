@@ -61,3 +61,7 @@ Film::comparaFilme(const Film &a, const Film &b)
 {
     return a.numeFilm < b.numeFilm;
 }
+
+bool Film::operator<(const Film& other) const {
+    return numeFilm < other.numeFilm;
+}

@@ -4,6 +4,7 @@
 #include <vector>
 #include <iomanip>
 #include <map>
+#include <regex>
 
 #include "Sala.h"
 #include "Cinema.h"
@@ -54,16 +55,39 @@ conversieExtinsa(std::istream &f)
     }
 }
 
-void addUser(std::map<std::string, std::string>& credentials, const std::string& username, const std::string& password) {
+void
+addUser(std::map<std::string, std::string> &credentials, const std::string &username, const std::string &password)
+{
     credentials[username] = password;
 }
 
-bool authenticate(const std::map<std::string, std::string>& credentials, const std::string& username, const std::string& password) {
+bool
+authenticate(const std::map<std::string, std::string> &credentials,
+             const std::string &username,
+             const std::string &password)
+{
     auto it = credentials.find(username);
-    if (it != credentials.end() && it->second == password) {
+    if (it != credentials.end() && it->second == password)
+    {
         return true;
     }
     return false;
+}
+
+
+bool nrCard(const std::string& nr_card) {
+    std::regex pattern(R"(^\d{4}(?:\s?\d{4}){3}$)");
+    return std::regex_match(nr_card, pattern);
+}
+
+bool ccvCode(const std::string& ccv) {
+    std::regex pattern(R"(^\d{3}$)");
+    return std::regex_match(ccv, pattern);
+}
+
+bool dataExp(const std::string& data_exp) {
+    std::regex pattern(R"(^(0[1-9]|1[0-2])/(2[4-9])$)");
+    return std::regex_match(data_exp, pattern);
 }
 
 int
@@ -84,24 +108,15 @@ main()
     {
         cinemauri[i].setId(i + 1);
     }
-    Film *filme = new Film[7];
-    filme[0].setNumeFilm("Dune Part 2");
-    filme[1].setNumeFilm("Oppenheimer");
-    filme[2].setNumeFilm("Star Wars Episode 3 Revenge of the Sith");
-    filme[3].setNumeFilm("The Dark Knight");
-    filme[4].setNumeFilm("The Lord of the Rings The Two Towers");
-    filme[5].setNumeFilm("The Martian");
-    filme[6].setNumeFilm("The Matrix");
-    filme[0].setRating(8.8);
-    filme[1].setRating(8.3);
-    filme[2].setRating(7.6);
-    filme[3].setRating(9.0);
-    filme[4].setRating(8.8);
-    filme[5].setRating(8.0);
-    filme[6].setRating(8.7);
     for (int i = 0; i < 3; ++i)
     {
-        cinemauri[i].setFilmeDifuzate(7, filme);
+        cinemauri[i].adaugaFilm("Dune Part 2", 8.8);
+        cinemauri[i].adaugaFilm("Oppenheimer", 8.3);
+        cinemauri[i].adaugaFilm("Star Wars Episode 3 Revenge of the Sith", 7.6);
+        cinemauri[i].adaugaFilm("The Dark Knight", 9.0);
+        cinemauri[i].adaugaFilm("The Lord of the Rings The Two Towers", 8.8);
+        cinemauri[i].adaugaFilm("The Martian", 8.0);
+        cinemauri[i].adaugaFilm("The Matrix", 8.7);
     }
     std::vector<std::string> zile = {
         "Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"
@@ -149,10 +164,11 @@ client_sau_admin:
         cod_cinema = std::to_string(cinemauri[std::stoi(tasta) - 1].getId());
     citeste_film:
         std::cout << "\nApasati tasta corespunzatoare filmului dorit:\n";
-        for (int i = 0; i < cinemauri[0].getNrFilme(); ++i)
+        int it = 1;
+        for (const auto &film : cinemauri[0].getFilmeDifuzate())
         {
-            std::cout << i + 1 << "." << cinemauri[0].getFilmeDifuzate()[i].getNumeFilm() << " (" << std::fixed
-                      << std::setprecision(1) << cinemauri[0].getFilmeDifuzate()[i].getRating() << ")\n";
+            std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                      << std::setprecision(1) << film.getRating() << ")\n";
         }
         std::cout << "Apasati tasta 0 pentru a merge inapoi.\n";
         tasta = conversieExtinsa(f);
@@ -160,13 +176,17 @@ client_sau_admin:
         {
             goto citeste_cinema;
         }
-        if (std::stoi(tasta) < 0 || std::stoi(tasta) > cinemauri[0].getNrFilme())
+        if (std::stoi(tasta) < 0 || std::stoi(tasta) > (int)cinemauri[0].getFilmeDifuzate().size())
         {
             std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_film;
         }
-        std::cout << "Ati selectat " << cinemauri[0].getFilmeDifuzate()[std::stoi(tasta) - 1].getNumeFilm() << "\n";
-        cod_film = cinemauri[0].getFilmeDifuzate()[std::stoi(tasta) - 1].getNumeFilm();
+        auto filmeDifuzate = cinemauri[0].getFilmeDifuzate();
+        index = std::stoi(tasta) - 1;
+        auto filmIterator = filmeDifuzate.begin();
+        std::advance(filmIterator, index);
+        std::cout << "Ati selectat " << filmIterator->getNumeFilm() << "\n";
+        cod_film = filmIterator->getNumeFilm();
         for (int i = 0; (unsigned long long)i < cod_film.length(); ++i)
         {
             if (cod_film[i] == ' ')
@@ -756,19 +776,34 @@ client_sau_admin:
             auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
             suma += bilet_normal->getPret();
         }
-        std::cout << "\nDe platit: " << suma << " lei\nNumarul cardului [12 cifre]: ";
+        std::cout << "\nDe platit: " << suma << " lei\nNumarul cardului [16 cifre]: ";
         f.get();
         std::getline(f, nr_card);
         std::cout << nr_card << "\n";
+        if (!nrCard(nr_card))
+        {
+            std::cout << "Numarul cardului introdus nu este valid.\n";
+            goto plata;
+        }
         std::cout << "Numele titularului: ";
         std::getline(f, nume_titular);
         std::cout << nume_titular << "\n";
         std::cout << "Data expirarii [MM/YY]: ";
         f >> data_exp;
         std::cout << data_exp << "\n";
+        if (!dataExp(data_exp))
+        {
+            std::cout << "Data introdusa nu este valida.\n";
+            goto plata;
+        }
         std::cout << "CCV [3 cifre]: ";
         ccv = std::stoi(conversieExtinsa(f));
         std::cout << ccv << "\n";
+        if (!ccvCode(std::to_string(ccv)))
+        {
+            std::cout << "CCV-ul introdus nu este valid.\n";
+            goto plata;
+        }
         if (nr_bilete == 1)
         {
             auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[0]);
@@ -884,9 +919,12 @@ client_sau_admin:
         std::string parola;
         std::getline(f, parola);
         std::cout << parola;
-        if (authenticate(credentials, username, parola)) {
+        if (authenticate(credentials, username, parola))
+        {
             std::cout << "\n\nBuna, " << username;
-        } else {
+        }
+        else
+        {
             std::cout << "\n\nNume sau parola gresita.";
             goto client_sau_admin;
         }
@@ -911,15 +949,11 @@ client_sau_admin:
             std::getline(f, nouFilm);
             double rating;
             f >> rating;
-            std::cout << "Ati selectat " << nouFilm << " (" << std::fixed << std::setprecision(1) << rating << ").";
-            cinemauri[0].adaugaFilm(nouFilm, rating);
-            if (cinemauri[0].getNrFilme() > cinemauri[1].getNrFilme())
+            std::cout << "Ati selectat " << nouFilm << " (" << std::fixed << std::setprecision(1) << rating
+                      << "). Filmul a fost adaugat cu succes.\n";
+            for (auto &cinema : cinemauri)
             {
-                std::cout << " Filmul a fost adaugat cu succes.\n";
-                for (int i = 1; i < 3; ++i)
-                {
-                    cinemauri[i].adaugaFilm(nouFilm, rating);
-                }
+                cinema.adaugaFilm(nouFilm, rating);
             }
             goto actiuni_admin;
         }
@@ -929,14 +963,9 @@ client_sau_admin:
             std::string nouFilm;
             std::getline(f, nouFilm);
             std::cout << "Ati selectat " << nouFilm << ". ";
-            cinemauri[0].stergeFilm(nouFilm);
-            if (cinemauri[0].getNrFilme() < cinemauri[1].getNrFilme())
+            for (auto &cinema : cinemauri)
             {
-                std::cout << " Filmul a fost sters cu succes.\n";
-                for (int i = 1; i < 3; ++i)
-                {
-                    cinemauri[i].stergeFilm(nouFilm);
-                }
+                cinema.stergeFilm(nouFilm);
             }
             goto actiuni_admin;
         }
@@ -947,35 +976,20 @@ client_sau_admin:
             std::getline(f, nouFilm);
             double nouRating;
             f >> nouRating;
-            index = -1;
-            for (int i = 0; i < cinemauri[0].getNrFilme(); ++i)
+            std::cout << "Ati selectat " << nouFilm << " (" << nouRating << "). ";
+            for (auto &cinema : cinemauri)
             {
-                if (cinemauri[0].getFilmeDifuzate()[i].getNumeFilm() == nouFilm)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            std::cout << "Ati selectat " << nouFilm << " (" << cinemauri[0].getFilmeDifuzate()[index].getRating()
-                      << " -> " << std::fixed << std::setprecision(1) << nouRating << ").";
-            cinemauri[0].schimbaRating(nouFilm, nouRating);
-            if (index != -1 && cinemauri[0].getFilmeDifuzate()[index].getRating() !=
-                cinemauri[1].getFilmeDifuzate()[index].getRating())
-            {
-                std::cout << " Rating-ul filmului a fost modificat cu succes.\n";
-                for (int i = 1; i < 3; ++i)
-                {
-                    cinemauri[i].schimbaRating(nouFilm, nouRating);
-                }
+                cinema.schimbaRating(nouFilm, nouRating);
             }
             goto actiuni_admin;
         }
         if (std::stoi(tasta) == 4)
         {
-            for (int i = 0; i < cinemauri[0].getNrFilme(); ++i)
+            int it = 1;
+            for (const auto &film : cinemauri[0].getFilmeDifuzate())
             {
-                std::cout << i + 1 << "." << cinemauri[0].getFilmeDifuzate()[i].getNumeFilm() << " (" << std::fixed
-                          << std::setprecision(1) << cinemauri[0].getFilmeDifuzate()[i].getRating() << ")\n";
+                std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                          << std::setprecision(1) << film.getRating() << ")\n";
             }
             goto actiuni_admin;
         }
@@ -984,7 +998,6 @@ exit:
     std::cout << "\nLa revedere!\n";
     delete S1;
     delete S2;
-    delete[] filme;
     for (Bilet *bilet : bilete)
     {
         delete bilet;

@@ -10,7 +10,6 @@ class Film
 private:
     std::string numeFilm;
     double rating;
-
 public:
     friend class Cinema;
     Film(std::string numeFilm, double rating);
@@ -35,6 +34,7 @@ public:
     operator<<(std::ostream &out, const Film &film);
     static bool
     comparaFilme(const Film &a, const Film &b);
+    bool operator<(const Film& other) const;
 };
 
 #endif

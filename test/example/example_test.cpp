@@ -74,8 +74,6 @@ TEST(CinemaConstructor, ParametrizedConstructor)
     Cinema cinema(1, "Nume_Mall");
     EXPECT_EQ(1, cinema.getId());
     EXPECT_EQ("Nume_Mall", cinema.getNumeMall());
-    EXPECT_EQ(0, cinema.getNrFilme());
-    EXPECT_EQ(nullptr, cinema.getFilmeDifuzate());
 }
 
 TEST(CinemaConstructor, DefaultConstructor)
@@ -83,8 +81,6 @@ TEST(CinemaConstructor, DefaultConstructor)
     Cinema cinema;
     EXPECT_EQ(0, cinema.getId());
     EXPECT_EQ("", cinema.getNumeMall());
-    EXPECT_EQ(0, cinema.getNrFilme());
-    EXPECT_EQ(nullptr, cinema.getFilmeDifuzate());
 }
 
 TEST(CinemaSetterGetter, IdSetterGetter)
@@ -101,49 +97,49 @@ TEST(CinemaSetterGetter, NumeMallSetterGetter)
     EXPECT_EQ("Mall_Name", cinema.getNumeMall());
 }
 
-TEST(CinemaSetterGetter, NrFilmeSetterGetter)
-{
-    Cinema cinema;
-    cinema.setNrFilme(5);
-    EXPECT_EQ(5, cinema.getNrFilme());
-}
-
 TEST(CinemaSetterGetter, FilmeDifuzateSetterGetter)
 {
     Cinema cinema;
     Film film("Film_Name", 8.0);
-    Film *filmArray = new Film[1];
-    filmArray[0] = film;
-    cinema.setFilmeDifuzate(1, filmArray);
-    EXPECT_EQ(1, cinema.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema.getFilmeDifuzate()[0].getRating());
-    delete[] filmArray;
+    std::set<Film> filmSet;
+    filmSet.insert(film);
+    cinema.setFilmeDifuzate(filmSet);
+    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAddFilm, AdaugaFilm)
 {
     Cinema cinema;
     cinema.adaugaFilm("Film_Name", 8.0);
-    EXPECT_EQ(1, cinema.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaRemoveFilm, StergeFilm)
 {
     Cinema cinema;
+    std::ostringstream oss;
+    std::streambuf* coutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
     cinema.adaugaFilm("Film_Name", 8.0);
     cinema.stergeFilm("Film_Name");
-    EXPECT_EQ(0, cinema.getNrFilme());
+    std::cout.rdbuf(coutBuffer);
+    EXPECT_EQ("Filmul a fost sters cu succes.\n", oss.str());
+    EXPECT_EQ(0, cinema.getFilmeDifuzate().size());
 }
 
 TEST(CinemaChangeRating, SchimbaRating)
 {
     Cinema cinema;
+    std::ostringstream oss;
+    std::streambuf* coutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
     cinema.adaugaFilm("Film_Name", 8.0);
-    cinema.schimbaRating("Film_Name", 9.0);
-    EXPECT_EQ(9.0, cinema.getFilmeDifuzate()[0].getRating());
+    cinema.schimbaRating("Film_Name", 8.5);
+    std::cout.rdbuf(coutBuffer);
+    EXPECT_EQ("Rating-ul filmului a fost modificat cu succes.\n", oss.str());
+    EXPECT_EQ(8.5, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaCopyConstructor, CopyConstructor)
@@ -151,9 +147,8 @@ TEST(CinemaCopyConstructor, CopyConstructor)
     Cinema cinema1;
     cinema1.adaugaFilm("Film_Name", 8.0);
     Cinema cinema2(cinema1);
-    EXPECT_EQ(1, cinema2.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema2.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name", cinema2.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAssignmentOperator, AssignmentOperator)
@@ -162,9 +157,8 @@ TEST(CinemaAssignmentOperator, AssignmentOperator)
     cinema1.adaugaFilm("Film_Name_1", 8.0);
     Cinema cinema2;
     cinema2 = cinema1;
-    EXPECT_EQ(1, cinema2.getNrFilme());
-    EXPECT_EQ("Film_Name_1", cinema2.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name_1", cinema2.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAdditionOperator, AdditionOperator)
@@ -175,32 +169,33 @@ TEST(CinemaAdditionOperator, AdditionOperator)
     cinema2.adaugaFilm("Film_Name_1", 8.0);
     cinema2.adaugaFilm("Film_Name_2", 9.0);
     Cinema cinema3 = cinema1 + cinema2;
-    EXPECT_EQ(2, cinema3.getNrFilme());
-    EXPECT_EQ("Film_Name_1", cinema3.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema3.getFilmeDifuzate()[0].getRating());
-    EXPECT_EQ("Film_Name_2", cinema3.getFilmeDifuzate()[1].getNumeFilm());
-    EXPECT_EQ(9.0, cinema3.getFilmeDifuzate()[1].getRating());
+    std::set<Film> filmeDifuzate = cinema3.getFilmeDifuzate();
+    auto it = filmeDifuzate.begin();
+    EXPECT_EQ("Film_Name_1", it->getNumeFilm());
+    EXPECT_EQ(8.0, it->getRating());
+    it++;
+    EXPECT_EQ("Film_Name_2", it->getNumeFilm());
+    EXPECT_EQ(9.0, it->getRating());
 }
 
 TEST(CinemaStreamOperators, InputOperator)
 {
-    std::istringstream input("1 Mall_Name 5");
+    std::istringstream input("1 Mall_Name");
     Cinema cinema;
     input >> cinema;
     EXPECT_EQ(1, cinema.getId());
     EXPECT_EQ("Mall_Name", cinema.getNumeMall());
-    EXPECT_EQ(5, cinema.getNrFilme());
 }
 
 TEST(CinemaStreamOperators, OutputOperator)
 {
     Cinema cinema(1, "Mall_Name");
-    cinema.setNrFilme(5);
+    std::set<Film> filmSet;
+    filmSet.insert(Film("Film_Name", 8.0));
+    cinema.setFilmeDifuzate(filmSet);
     std::ostringstream output;
-    std::streambuf *oldCout = std::cout.rdbuf(output.rdbuf());
-    std::cout << cinema;
-    std::cout.rdbuf(oldCout);
-    EXPECT_EQ("\nid: 1 nume mall: Mall_Name numar sali: 5", output.str());
+    output << cinema;
+    EXPECT_EQ("\nid: 1 nume mall: Mall_Name", output.str());
 }
 
 TEST(SalaConstructor, ParameterizedConstructor)
