@@ -15,13 +15,15 @@ Film::setRating(double rating1)
 {
     this->rating = rating1;
 }
-void
-Film::setNumeFilm(std::string numeFilm1)
+
+// cppcheck-suppress unusedFunction
+void Film::setNumeFilm(std::string numeFilm1)
 {
     this->numeFilm = std::move(numeFilm1);
 }
-double
-Film::getRating() const
+
+// cppcheck-suppress unusedFunction
+double Film::getRating() const
 {
     return rating;
 }
@@ -57,11 +59,7 @@ operator<<(std::ostream &out, const Film &film)
 }
 
 bool
-Film::comparaFilme(const Film &a, const Film &b)
+Film::operator<(const Film &other) const
 {
-    return a.numeFilm < b.numeFilm;
-}
-
-bool Film::operator<(const Film& other) const {
     return numeFilm < other.numeFilm;
 }

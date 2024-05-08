@@ -64,8 +64,8 @@ TEST(FilmComparison, LessThanOperator)
 {
     Film film1("Film_Name_1", 8.0);
     Film film2("Film_Name_2", 9.0);
-    EXPECT_TRUE(Film::comparaFilme(film1, film2));
-    EXPECT_FALSE(Film::comparaFilme(film2, film1));
+    EXPECT_TRUE(film1 < film2);
+    EXPECT_FALSE(film2 < film1);
 }
 
 TEST(CinemaConstructor, ParametrizedConstructor)
