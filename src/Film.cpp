@@ -10,8 +10,9 @@ Film::Film()
     this->numeFilm = "";
     this->rating = 0;
 }
-void
-Film::setRating(double rating1)
+
+// cppcheck-suppress unusedFunction
+void Film::setRating(double rating1)
 {
     this->rating = rating1;
 }
