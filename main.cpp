@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <map>
 
 #include "Sala.h"
 #include "Cinema.h"
@@ -53,12 +54,28 @@ conversieExtinsa(std::istream &f)
     }
 }
 
+void addUser(std::map<std::string, std::string>& credentials, const std::string& username, const std::string& password) {
+    credentials[username] = password;
+}
+
+bool authenticate(const std::map<std::string, std::string>& credentials, const std::string& username, const std::string& password) {
+    auto it = credentials.find(username);
+    if (it != credentials.end() && it->second == password) {
+        return true;
+    }
+    return false;
+}
+
 int
 main()
 {
     std::istream &f = std::cin;
     int id_sala, k, loc[63], x, y, nr_bilete = 0, suma = 0, ccv, index;
     std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, nr_card, nume_titular, data_exp;
+    std::map<std::string, std::string> credentials;
+    addUser(credentials, "mateistefan", "qwertyuiop");
+    addUser(credentials, "dragosbahrim", "asdfghjkl");
+    addUser(credentials, "shatgepeto", "zxcvbnm");
     std::array<Cinema, 3> cinemauri{};
     cinemauri[0].setNumeMall("Afi Cotroceni");
     cinemauri[1].setNumeMall("Park Lake");
@@ -867,7 +884,12 @@ client_sau_admin:
         std::string parola;
         std::getline(f, parola);
         std::cout << parola;
-        std::cout << "\n\nBuna, " << username;
+        if (authenticate(credentials, username, parola)) {
+            std::cout << "\n\nBuna, " << username;
+        } else {
+            std::cout << "\n\nNume sau parola gresita.";
+            goto client_sau_admin;
+        }
     actiuni_admin:
         std::cout
             << "\n0.Iesiti\n1.Adaugati un film. [input: nume 'enter' rating]\n2.Stergeti un film. [input: nume]\n3.Schimba rating-ul unui film. [input: nume 'enter' rating]\n4.Afiseaza lista filmelor.\n";
