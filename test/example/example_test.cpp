@@ -35,6 +35,14 @@ TEST(FilmSetterGetter, NumeFilmSetterGetter)
     EXPECT_EQ("Film_Name_New", film.getNumeFilm());
 }
 
+TEST(FilmConstructor, CopyConstructor)
+{
+    Film film("FilmName", 7.3);
+    Film filmCopy(film);
+    EXPECT_EQ(film.getNumeFilm(), filmCopy.getNumeFilm());
+    EXPECT_EQ(film.getRating(), filmCopy.getRating());
+}
+
 TEST(FilmOperatorEqual, EqualOperator)
 {
     Film film1("Film_Name", 8.2);

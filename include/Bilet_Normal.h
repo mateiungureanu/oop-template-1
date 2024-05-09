@@ -14,23 +14,18 @@ protected:
     const int pret = 25;
 public:
     Bilet_Normal(int rand, int coloana);
-
     Bilet_Normal();
-
     ~Bilet_Normal() override = default;
 
     void
     setRand(int rand1);
-
     void
     setColoana(int coloana1);
 
     [[nodiscard]] int
     getRand() const;
-
     [[nodiscard]] int
     getColoana() const;
-
     [[nodiscard]] virtual int
     getPret();
 

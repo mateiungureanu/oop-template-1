@@ -74,18 +74,23 @@ authenticate(const std::map<std::string, std::string> &credentials,
     return false;
 }
 
-
-bool nrCard(const std::string& nr_card) {
+bool
+nrCard(const std::string &nr_card)
+{
     std::regex pattern(R"(^\d{4}(?:\s?\d{4}){3}$)");
     return std::regex_match(nr_card, pattern);
 }
 
-bool ccvCode(const std::string& ccv) {
+bool
+ccvCode(const std::string &ccv)
+{
     std::regex pattern(R"(^\d{3}$)");
     return std::regex_match(ccv, pattern);
 }
 
-bool dataExp(const std::string& data_exp) {
+bool
+dataExp(const std::string &data_exp)
+{
     std::regex pattern(R"(^(0[1-9]|1[0-2])/(2[4-9])$)");
     return std::regex_match(data_exp, pattern);
 }
@@ -94,6 +99,7 @@ int
 main()
 {
     std::istream &f = std::cin;
+    bool ordoneaza = false;
     int id_sala, k, loc[63], x, y, nr_bilete = 0, suma = 0, ccv, index;
     std::string tasta, cod_cinema, cod_film, cod_zi, cod_ora, cod_sala, nr_card, nume_titular, data_exp;
     std::map<std::string, std::string> credentials;
@@ -164,14 +170,73 @@ client_sau_admin:
         cod_cinema = std::to_string(cinemauri[std::stoi(tasta) - 1].getId());
     citeste_film:
         std::cout << "\nApasati tasta corespunzatoare filmului dorit:\n";
-        int it = 1;
-        for (const auto &film : cinemauri[0].getFilmeDifuzate())
+        if (!ordoneaza)
         {
-            std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
-                      << std::setprecision(1) << film.getRating() << ")\n";
+            std::cout << "(ordonat dupa nume)\n";
+            int it = 1;
+            for (const auto &film : cinemauri[0].getFilmeDifuzate())
+            {
+                std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                          << std::setprecision(1) << film.getRating() << ")\n";
+            }
         }
-        std::cout << "Apasati tasta 0 pentru a merge inapoi.\n";
+        else
+        {
+            std::cout << "(ordonat dupa rating)\n";
+            int it = 1;
+                for (const auto &film : cinemauri[0].getFilmeDifuzate())
+                {
+                    std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                              << std::setprecision(1) << film.getRating() << ")\n";
+                }
+                it = 1;
+                std::cout << "start" << std::endl;
+                std::cout << "Size of set: " << cinemauri[0].getFilmeDifuzate().size() << std::endl;
+                try {
+                    std::vector<Film> filme(cinemauri[0].getFilmeDifuzate().begin(), cinemauri[0].getFilmeDifuzate().end());
+                    std::cout << "vector made" << std::endl;
+                } catch (const std::exception& e) {
+                    std::cerr << "Exception caught: " << e.what() << std::endl;
+                }
+            std::vector<Film> filme(cinemauri[0].getFilmeDifuzate().begin(), cinemauri[0].getFilmeDifuzate().end());
+                for (const auto &film : filme)
+                {
+                    std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                              << std::setprecision(1) << film.getRating() << ")\n";
+                }
+//            std::sort(filme.begin(), filme.end(), [](const Film &a, const Film &b)
+//            {
+//                std::cout << "Comparing " << a.getNumeFilm() << " (" << a.getRating()
+//                          << ") with " << b.getNumeFilm() << " (" << b.getRating() << ")\n";
+//                return a.getRating() > b.getRating();
+//            });
+//            std::cout << "sort done" << std::endl;
+                try {
+                    std::sort(filme.begin(), filme.end(), [](const Film &a, const Film &b)
+                    {
+                        std::cout << "Comparing " << a.getNumeFilm() << " (" << a.getRating()
+                                  << ") with " << b.getNumeFilm() << " (" << b.getRating() << ")\n";
+                        return a.getRating() > b.getRating();
+                    });
+                    std::cout << "sort done" << std::endl;
+                } catch (const std::exception& e) {
+                    std::cerr << "Error during sorting: " << e.what() << std::endl;
+                }
+            for (const auto &film : filme)
+            {
+                std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
+                          << std::setprecision(1) << film.getRating() << ")\n";
+            }
+            std::cout << "end" << std::endl;
+        }
+        std::cout
+            << "Apasati tasta 10 pentru a schimba modul de ordonare al filmelor.\nApasati tasta 0 pentru a merge inapoi.\n";
         tasta = conversieExtinsa(f);
+        if (std::stoi(tasta) == 10)
+        {
+            ordoneaza = !ordoneaza;
+            goto citeste_film;
+        }
         if (std::stoi(tasta) == 0)
         {
             goto citeste_cinema;

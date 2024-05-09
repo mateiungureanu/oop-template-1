@@ -26,12 +26,17 @@ public:
     [[nodiscard]] std::string
     getNumeFilm() const;
 
+    Film(const Film &aux);
+
     bool
     operator==(const Film &film) const;
+
     Film &
     operator=(const Film &aux);
+
     friend std::ostream &
     operator<<(std::ostream &out, const Film &film);
+
     bool
     operator<(const Film &other) const;
 };

@@ -12,19 +12,22 @@ Film::Film()
 }
 
 // cppcheck-suppress unusedFunction
-void Film::setRating(double rating1)
+void
+Film::setRating(double rating1)
 {
     this->rating = rating1;
 }
 
 // cppcheck-suppress unusedFunction
-void Film::setNumeFilm(std::string numeFilm1)
+void
+Film::setNumeFilm(std::string numeFilm1)
 {
     this->numeFilm = std::move(numeFilm1);
 }
 
 // cppcheck-suppress unusedFunction
-double Film::getRating() const
+double
+Film::getRating() const
 {
     return rating;
 }
@@ -32,6 +35,11 @@ std::string
 Film::getNumeFilm() const
 {
     return numeFilm;
+}
+Film::Film(const Film &aux)
+{
+    this->numeFilm = aux.numeFilm;
+    this->rating = aux.rating;
 }
 bool
 Film::operator==(const Film &film) const
