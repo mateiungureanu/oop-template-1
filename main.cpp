@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <map>
 #include <regex>
+#include <algorithm>
 
 #include "Sala.h"
 #include "Cinema.h"
