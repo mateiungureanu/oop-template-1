@@ -12,15 +12,13 @@ Film::Film()
 }
 
 // cppcheck-suppress unusedFunction
-void
-Film::setRating(double rating1)
+void Film::setRating(double rating1)
 {
     this->rating = rating1;
 }
 
 // cppcheck-suppress unusedFunction
-void
-Film::setNumeFilm(std::string numeFilm1)
+void Film::setNumeFilm(std::string numeFilm1)
 {
     this->numeFilm = std::move(numeFilm1);
 }
