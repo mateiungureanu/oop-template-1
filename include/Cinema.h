@@ -34,7 +34,7 @@ public:
     [[nodiscard]] std::string
     getNumeMall() const;
 
-    [[nodiscard]] std::set<Film>
+    [[nodiscard]] const std::set<Film> &
     getFilmeDifuzate() const;
 
     void

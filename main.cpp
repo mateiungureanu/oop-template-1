@@ -171,6 +171,11 @@ client_sau_admin:
         cod_cinema = std::to_string(cinemauri[std::stoi(tasta) - 1].getId());
     citeste_film:
         std::cout << "\nApasati tasta corespunzatoare filmului dorit:\n";
+        std::vector<Film> filme(cinemauri[0].getFilmeDifuzate().begin(), cinemauri[0].getFilmeDifuzate().end());
+        std::sort(filme.begin(), filme.end(), [](const Film &a, const Film &b)
+        {
+            return a.getRating() > b.getRating();
+        });
         if (!ordoneaza)
         {
             std::cout << "(ordonat dupa nume)\n";
@@ -185,50 +190,11 @@ client_sau_admin:
         {
             std::cout << "(ordonat dupa rating)\n";
             int it = 1;
-                for (const auto &film : cinemauri[0].getFilmeDifuzate())
-                {
-                    std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
-                              << std::setprecision(1) << film.getRating() << ")\n";
-                }
-                it = 1;
-                std::cout << "start" << std::endl;
-                std::cout << "Size of set: " << cinemauri[0].getFilmeDifuzate().size() << std::endl;
-                try {
-                    std::vector<Film> filme(cinemauri[0].getFilmeDifuzate().begin(), cinemauri[0].getFilmeDifuzate().end());
-                    std::cout << "vector made" << std::endl;
-                } catch (const std::exception& e) {
-                    std::cerr << "Exception caught: " << e.what() << std::endl;
-                }
-            std::vector<Film> filme(cinemauri[0].getFilmeDifuzate().begin(), cinemauri[0].getFilmeDifuzate().end());
-                for (const auto &film : filme)
-                {
-                    std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
-                              << std::setprecision(1) << film.getRating() << ")\n";
-                }
-//            std::sort(filme.begin(), filme.end(), [](const Film &a, const Film &b)
-//            {
-//                std::cout << "Comparing " << a.getNumeFilm() << " (" << a.getRating()
-//                          << ") with " << b.getNumeFilm() << " (" << b.getRating() << ")\n";
-//                return a.getRating() > b.getRating();
-//            });
-//            std::cout << "sort done" << std::endl;
-                try {
-                    std::sort(filme.begin(), filme.end(), [](const Film &a, const Film &b)
-                    {
-                        std::cout << "Comparing " << a.getNumeFilm() << " (" << a.getRating()
-                                  << ") with " << b.getNumeFilm() << " (" << b.getRating() << ")\n";
-                        return a.getRating() > b.getRating();
-                    });
-                    std::cout << "sort done" << std::endl;
-                } catch (const std::exception& e) {
-                    std::cerr << "Error during sorting: " << e.what() << std::endl;
-                }
             for (const auto &film : filme)
             {
                 std::cout << it++ << "." << film.getNumeFilm() << " (" << std::fixed
                           << std::setprecision(1) << film.getRating() << ")\n";
             }
-            std::cout << "end" << std::endl;
         }
         std::cout
             << "Apasati tasta 10 pentru a schimba modul de ordonare al filmelor.\nApasati tasta 0 pentru a merge inapoi.\n";
@@ -247,17 +213,33 @@ client_sau_admin:
             std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_film;
         }
-        auto filmeDifuzate = cinemauri[0].getFilmeDifuzate();
-        index = std::stoi(tasta) - 1;
-        auto filmIterator = filmeDifuzate.begin();
-        std::advance(filmIterator, index);
-        std::cout << "Ati selectat " << filmIterator->getNumeFilm() << "\n";
-        cod_film = filmIterator->getNumeFilm();
-        for (int i = 0; (unsigned long long)i < cod_film.length(); ++i)
+        if (!ordoneaza)
         {
-            if (cod_film[i] == ' ')
+            auto filmeDifuzate = cinemauri[0].getFilmeDifuzate();
+            index = std::stoi(tasta) - 1;
+            auto filmIterator = filmeDifuzate.begin();
+            std::advance(filmIterator, index);
+            std::cout << "Ati selectat " << filmIterator->getNumeFilm() << "\n";
+            cod_film = filmIterator->getNumeFilm();
+            for (int i = 0; (unsigned long long)i < cod_film.length(); ++i)
             {
-                cod_film[i] = '_';
+                if (cod_film[i] == ' ')
+                {
+                    cod_film[i] = '_';
+                }
+            }
+        }
+        else
+        {
+            index = std::stoi(tasta) - 1;
+            std::cout << "Ati selectat " << filme[index].getNumeFilm() << "\n";
+            cod_film = filme[index].getNumeFilm();
+            for (int i = 0; (unsigned long long)i < cod_film.length(); ++i)
+            {
+                if (cod_film[i] == ' ')
+                {
+                    cod_film[i] = '_';
+                }
             }
         }
     citeste_zi:

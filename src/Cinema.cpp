@@ -29,7 +29,7 @@ std::string Cinema::getNumeMall() const {
     return numeMall;
 }
 
-std::set<Film> Cinema::getFilmeDifuzate() const {
+const std::set<Film>& Cinema::getFilmeDifuzate() const {
     return filmeDifuzate;
 }
 
