@@ -5,7 +5,7 @@
 #include <Bilet_Normal.h>
 #include <Bilet_4Dx.h>
 #include <Bilet_VIP.h>
-#include <Bilet_Derivat.h>
+#include "Bilet_Template.h"
 
 TEST(FilmConstructor, ParametrizedConstructor)
 {
@@ -38,9 +38,9 @@ TEST(FilmSetterGetter, NumeFilmSetterGetter)
 TEST(FilmConstructor, CopyConstructor)
 {
     Film film("FilmName", 7.3);
-    Film filmCopy(film);
-    EXPECT_EQ(film.getNumeFilm(), filmCopy.getNumeFilm());
-    EXPECT_EQ(film.getRating(), filmCopy.getRating());
+    Film copyFilm(film);
+    EXPECT_EQ(film.getNumeFilm(), copyFilm.getNumeFilm());
+    EXPECT_EQ(film.getRating(), copyFilm.getRating());
 }
 
 TEST(FilmOperatorEqual, EqualOperator)
@@ -177,7 +177,7 @@ TEST(CinemaAdditionOperator, AdditionOperator)
     cinema2.adaugaFilm("Film_Name_1", 8.0);
     cinema2.adaugaFilm("Film_Name_2", 9.0);
     Cinema cinema3 = cinema1 + cinema2;
-    std::set<Film> filmeDifuzate = cinema3.getFilmeDifuzate();
+    const std::set<Film>& filmeDifuzate = cinema3.getFilmeDifuzate();
     auto it = filmeDifuzate.begin();
     EXPECT_EQ("Film_Name_1", it->getNumeFilm());
     EXPECT_EQ(8.0, it->getRating());
@@ -327,7 +327,7 @@ TEST(BiletNormalGetType, GetTypeFunction)
 
 TEST(BiletNormalDowngradeBilet, DowngradeBiletFunction)
 {
-    Bilet_Normal* biletPtr = Bilet_Normal::downgradeBilet(4, 8);
+    Bilet_Template<int>* biletPtr = Bilet_Template<int>::downgradeBilet(4, 8);
     EXPECT_EQ(4, biletPtr->getRand());
     EXPECT_EQ(8, biletPtr->getColoana());
     EXPECT_EQ(25, biletPtr->getPret());
@@ -479,12 +479,12 @@ TEST(BiletVIPSetterGetter, PretVIPSetterGetter)
 TEST(BiletVIPCopyConstructor, CopyConstructor)
 {
     Bilet_VIP bilet(2, 3, true, false);
-    Bilet_VIP biletCopy(bilet);
-    EXPECT_EQ(bilet.getRand(), biletCopy.getRand());
-    EXPECT_EQ(bilet.getColoana(), biletCopy.getColoana());
-    EXPECT_EQ(bilet.getPopcornGratis(), biletCopy.getPopcornGratis());
-    EXPECT_EQ(bilet.getBauturiGratis(), biletCopy.getBauturiGratis());
-    EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
+    Bilet_VIP copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPopcornGratis(), copyBilet.getPopcornGratis());
+    EXPECT_EQ(bilet.getBauturiGratis(), copyBilet.getBauturiGratis());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletVIPAssignmentOperator, AssignmentOperator)
@@ -497,95 +497,4 @@ TEST(BiletVIPAssignmentOperator, AssignmentOperator)
     EXPECT_EQ(bilet.getPopcornGratis(), biletCopy.getPopcornGratis());
     EXPECT_EQ(bilet.getBauturiGratis(), biletCopy.getBauturiGratis());
     EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
-TEST(BiletDerivatConstructor, ParameterizedConstructorWithAB)
-{
-    Bilet_Derivat bilet(2, 3, true, false);
-    EXPECT_EQ(2, bilet.getRand());
-    EXPECT_EQ(3, bilet.getColoana());
-    EXPECT_TRUE(bilet.getA());
-    EXPECT_FALSE(bilet.getB());
-    EXPECT_EQ(80, bilet.getPret());
-}
-
-TEST(BiletDerivatConstructor, ParameterizedConstructorWithoutAB)
-{
-    Bilet_Derivat bilet(2, 3);
-    EXPECT_EQ(2, bilet.getRand());
-    EXPECT_EQ(3, bilet.getColoana());
-    EXPECT_TRUE(bilet.getA());
-    EXPECT_TRUE(bilet.getB());
-    EXPECT_EQ(80, bilet.getPret());
-}
-
-TEST(BiletDerivatConstructor, DefaultConstructor)
-{
-    Bilet_Derivat bilet;
-    EXPECT_EQ(0, bilet.getRand());
-    EXPECT_EQ(0, bilet.getColoana());
-    EXPECT_TRUE(bilet.getA());
-    EXPECT_TRUE(bilet.getB());
-    EXPECT_EQ(80, bilet.getPret());
-}
-
-TEST(BiletDerivatSetterGetter, ASetterGetter)
-{
-    Bilet_Derivat bilet;
-    bilet.setA(false);
-    EXPECT_FALSE(bilet.getA());
-}
-
-TEST(BiletDerivatSetterGetter, BSetterGetter)
-{
-    Bilet_Derivat bilet;
-    bilet.setB(false);
-    EXPECT_FALSE(bilet.getB());
-}
-
-TEST(BiletDerivatSetterGetter, PretDerivatSetterGetter)
-{
-    Bilet_Derivat bilet;
-    bilet.setPretDerivat(70);
-    EXPECT_EQ(70, bilet.getPret());
-}
-
-TEST(BiletDerivatCopyConstructor, CopyConstructor)
-{
-    Bilet_Derivat bilet(2, 3, true, false);
-    Bilet_Derivat biletCopy(bilet);
-    EXPECT_EQ(bilet.getRand(), biletCopy.getRand());
-    EXPECT_EQ(bilet.getColoana(), biletCopy.getColoana());
-    EXPECT_EQ(bilet.getA(), biletCopy.getA());
-    EXPECT_EQ(bilet.getB(), biletCopy.getB());
-    EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
-TEST(BiletDerivatAssignmentOperator, AssignmentOperator)
-{
-    Bilet_Derivat bilet(2, 3, true, false);
-    Bilet_Derivat biletCopy;
-    biletCopy = bilet;
-    EXPECT_EQ(bilet.getRand(), biletCopy.getRand());
-    EXPECT_EQ(bilet.getColoana(), biletCopy.getColoana());
-    EXPECT_EQ(bilet.getA(), biletCopy.getA());
-    EXPECT_EQ(bilet.getB(), biletCopy.getB());
-    EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
-TEST(BiletDerivatGetType, GetTypeFunction)
-{
-    Bilet_Derivat bilet;
-    EXPECT_EQ("Derivat", bilet.getType());
-}
-
-TEST(BiletDerivatUpgradeBiletVIP, UpgradeBiletDerivatFunction)
-{
-    Bilet_Derivat* biletPtr = Bilet_Derivat::upgradeBiletDerivat(4, 8);
-    EXPECT_EQ(4, biletPtr->getRand());
-    EXPECT_EQ(8, biletPtr->getColoana());
-    EXPECT_TRUE(biletPtr->getA());
-    EXPECT_TRUE(biletPtr->getB());
-    EXPECT_EQ(80, biletPtr->getPret());
-    delete biletPtr;
 }

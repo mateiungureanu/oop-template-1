@@ -37,7 +37,7 @@ public:
     getScaunSuflator() const;
 
     [[nodiscard]] int
-    getPret() override;
+    getPret() const override;
 
     Bilet_4Dx(const Bilet_4Dx &aux);
 
@@ -45,10 +45,10 @@ public:
     operator=(const Bilet_4Dx &aux);
 
     void
-    afiseaza() override;
+    afiseaza() const override;
 
     [[nodiscard]] std::string
-    getType() override;
+    getType() const override;
 
     static Bilet_4Dx *
     upgradeBilet4Dx(int rand1, int coloana1);

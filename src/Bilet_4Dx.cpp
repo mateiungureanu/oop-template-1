@@ -45,7 +45,7 @@ Bilet_4Dx::getScaunSuflator() const
 }
 
 [[nodiscard]] int
-Bilet_4Dx::getPret()
+Bilet_4Dx::getPret() const
 {
     return pret4Dx;
 }
@@ -72,7 +72,7 @@ Bilet_4Dx::operator=(const Bilet_4Dx &aux)
 }
 
 void
-Bilet_4Dx::afiseaza()
+Bilet_4Dx::afiseaza() const
 {
     Bilet_Normal::afiseaza();
     std::cout << " | Bonus-uri 4Dx:";
@@ -87,7 +87,7 @@ Bilet_4Dx::afiseaza()
 }
 
 [[nodiscard]] std::string
-Bilet_4Dx::getType()
+Bilet_4Dx::getType() const
 {
     return "4Dx";
 }
