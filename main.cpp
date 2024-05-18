@@ -148,7 +148,7 @@ client_sau_admin:
     }
     if (std::stoi(tasta) < 0 || std::stoi(tasta) > 2)
     {
-        std::cout << "\nVa rugam apasati o tasta valida1.\n";
+        std::cout << "\nVa rugam apasati o tasta valida.\n";
         goto client_sau_admin;
     }
     if (std::stoi(tasta) == 1)
@@ -163,7 +163,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) < 0 || std::stoi(tasta) > 3)
         {
-            std::cout << "\nVa rugam apasati o tasta valida2.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_cinema;
         }
         std::cout << "Ati selectat " << cinemauri[std::stoi(tasta) - 1].getNumeMall() << "\n";
@@ -209,7 +209,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) < 0 || std::stoi(tasta) > (int)cinemauri[0].getFilmeDifuzate().size())
         {
-            std::cout << "\nVa rugam apasati o tasta valida3.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_film;
         }
         if (!ordoneaza)
@@ -251,7 +251,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) < 0 || std::stoi(tasta) > 7)
         {
-            std::cout << "\nVa rugam apasati o tasta valida4.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_zi;
         }
         std::cout << "Ati selectat " << zile[std::stoi(tasta) - 1] << "\n";
@@ -266,7 +266,7 @@ client_sau_admin:
         }
         if (std::stoi(tasta) < 0 || std::stoi(tasta) > 9)
         {
-            std::cout << "\nVa rugam apasati o tasta valida6.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto citeste_ora;
         }
         cod_ora = ore[std::stoi(tasta) - 1];
@@ -340,7 +340,7 @@ client_sau_admin:
             if (x < 0 || y < 0 || x == 9 || x > 10 || y > 10 || (x == 10 && y != 10) || (x == 0 && y != 0)
                 || (x != 10 && y == 10) || (x != 0 && y == 0))
             {
-                std::cout << "\nVa rugam apasati o tasta valida7.\n";
+                std::cout << "\nVa rugam apasati o tasta valida.\n";
                 goto citeste_loc;
             }
             if (loc[x * 9 + y] == 1)
@@ -410,7 +410,7 @@ client_sau_admin:
         tasta = conversieExtinsa(f);
         if (std::stoi(tasta) < 1 || std::stoi(tasta) > 6)
         {
-            std::cout << "\nVa rugam apasati o tasta valida8.\n";
+            std::cout << "\nVa rugam apasati o tasta valida.\n";
             goto upgrade_bilet;
         }
         if (std::stoi(tasta) == 1)
@@ -502,7 +502,7 @@ client_sau_admin:
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
                 {
-                    std::cout << "Va rugam apasati o tasta valida9.";
+                    std::cout << "Va rugam apasati o tasta valida.";
                     goto upgrade_bilet;
                 }
                 if (index == 1)
@@ -619,7 +619,7 @@ client_sau_admin:
                 index = std::stoi(tasta);
                 if (index < 0 || index > 2)
                 {
-                    std::cout << "Va rugam apasati o tasta valida10.";
+                    std::cout << "Va rugam apasati o tasta valida.";
                     goto upgrade_bilet;
                 }
                 if (index == 1)

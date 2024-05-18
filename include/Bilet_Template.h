@@ -41,7 +41,7 @@ public:
     afiseaza() const
     {
         std::cout << "Bilet " << std::setw(6) << std::left << getType() << " | Rand: " << rand << ", Loc: " << coloana
-                  << " | Pret: " << pret << std::endl;
+                  << " | Pret: " << pret;
     }
     [[nodiscard]] std::string getType() const override
     {
