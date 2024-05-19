@@ -75,6 +75,7 @@ void
 Bilet_4Dx::afiseaza() const
 {
     Bilet_Normal::afiseaza();
+    std::cout << " | Pret: " << pret4Dx;
     std::cout << " | Bonus-uri 4Dx:";
     if (scaunMiscator)
     {

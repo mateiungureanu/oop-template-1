@@ -75,6 +75,7 @@ void
 Bilet_VIP::afiseaza() const
 {
     Bilet_Normal::afiseaza();
+    std::cout << " | Pret: " << pretVIP;
     std::cout << " | Bonus-uri VIP:";
     if (popcornGratis)
     {
