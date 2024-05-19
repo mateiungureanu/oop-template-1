@@ -1,15 +1,9 @@
 #include "Film.h"
 
-Film::Film(std::string numeFilm, double rating)
-{
-    this->numeFilm = std::move(numeFilm);
-    this->rating = rating;
-}
-Film::Film()
-{
-    this->numeFilm = "";
-    this->rating = 0;
-}
+#include <utility>
+
+Film::Film(std::string numeFilm, double rating) : numeFilm(std::move(numeFilm)), rating(rating) {}
+Film::Film() : rating(0) {}
 
 // cppcheck-suppress unusedFunction
 void Film::setRating(double rating1)

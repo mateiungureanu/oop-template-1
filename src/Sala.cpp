@@ -1,11 +1,7 @@
 #include "Sala.h"
 
-Sala::Sala(int id)
+Sala::Sala(int id) : id(id), nrLocuri(63), nrRanduri(9), nrColoane(7)
 {
-    this->id = id;
-    this->nrLocuri = 63;
-    this->nrRanduri = 9;
-    this->nrColoane = 7;
     locuriOcupate = new bool[nrLocuri];
     for (int i = 0; i < nrLocuri; i++)
     {
