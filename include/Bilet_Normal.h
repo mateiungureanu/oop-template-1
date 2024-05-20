@@ -8,8 +8,6 @@ public:
     Bilet_Normal(int rand, int coloana);
     Bilet_Normal();
     ~Bilet_Normal() override = default;
-
-    [[nodiscard]] std::string getType() const override;
 };
 
-#endif // BILET_NORMAL_H
+#endif

@@ -30,10 +30,10 @@ public:
     void
     setPret4Dx(int pret4Dx1);
 
-    [[nodiscard]] int
+    [[nodiscard]] bool
     getScaunMiscator() const;
 
-    [[nodiscard]] int
+    [[nodiscard]] bool
     getScaunSuflator() const;
 
     [[nodiscard]] int

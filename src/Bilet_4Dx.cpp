@@ -32,13 +32,13 @@ Bilet_4Dx::setPret4Dx(int pret4Dx1)
     this->pret4Dx = pret4Dx1;
 }
 
-[[nodiscard]] int
+[[nodiscard]] bool
 Bilet_4Dx::getScaunMiscator() const
 {
     return scaunMiscator;
 }
 
-[[nodiscard]] int
+[[nodiscard]] bool
 Bilet_4Dx::getScaunSuflator() const
 {
     return scaunSuflator;
