@@ -15,6 +15,7 @@ Sala &Sala::operator=(const Sala &other)
     return *this;
 }
 
+// cppcheck-suppress unusedFunction
 void Sala::setIdSala(int id1)
 {
     this->id = id1;
@@ -26,21 +27,25 @@ void Sala::setLocuriOcupate(int nrLocuri1, const std::vector<bool> &locuriOcupat
     this->locuriOcupate = locuriOcupate1;
 }
 
+// cppcheck-suppress unusedFunction
 int Sala::getIdSala() const
 {
     return id;
 }
 
+// cppcheck-suppress unusedFunction
 int Sala::getNrLocuri() const
 {
     return nrLocuri;
 }
 
+// cppcheck-suppress unusedFunction
 int Sala::getNrRanduri() const
 {
     return nrRanduri;
 }
 
+// cppcheck-suppress unusedFunction
 int Sala::getNrColoane() const
 {
     return nrColoane;

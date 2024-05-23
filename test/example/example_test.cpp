@@ -21,6 +21,14 @@ TEST(FilmConstructor, DefaultConstructor)
     EXPECT_EQ("", film.getNumeFilm());
 }
 
+TEST(FilmConstructor, CopyConstructor)
+{
+    Film film("FilmName", 7.3);
+    Film copyFilm(film);
+    EXPECT_EQ(film.getNumeFilm(), copyFilm.getNumeFilm());
+    EXPECT_EQ(film.getRating(), copyFilm.getRating());
+}
+
 TEST(FilmSetterGetter, RatingSetterGetter)
 {
     Film film("Film_Name", 8.2);
@@ -33,14 +41,6 @@ TEST(FilmSetterGetter, NumeFilmSetterGetter)
     Film film("Film_Name", 8.2);
     film.setNumeFilm("Film_Name_New");
     EXPECT_EQ("Film_Name_New", film.getNumeFilm());
-}
-
-TEST(FilmConstructor, CopyConstructor)
-{
-    Film film("FilmName", 7.3);
-    Film copyFilm(film);
-    EXPECT_EQ(film.getNumeFilm(), copyFilm.getNumeFilm());
-    EXPECT_EQ(film.getRating(), copyFilm.getRating());
 }
 
 TEST(FilmOperatorEqual, EqualOperator)
@@ -208,12 +208,14 @@ TEST(CinemaStreamOperators, OutputOperator)
 
 TEST(SalaConstructor, ParameterizedConstructor)
 {
-    Sala sala(1);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     EXPECT_EQ(1, sala.getIdSala());
     EXPECT_EQ(63, sala.getNrLocuri());
     EXPECT_EQ(9, sala.getNrRanduri());
     EXPECT_EQ(7, sala.getNrColoane());
-    EXPECT_NE(nullptr, sala.getLocuriOcupate());
+    EXPECT_EQ(locuriOcupate, sala.getLocuriOcupate());
 }
 
 TEST(SalaConstructor, DefaultConstructor)
@@ -223,30 +225,30 @@ TEST(SalaConstructor, DefaultConstructor)
     EXPECT_EQ(0, sala.getNrLocuri());
     EXPECT_EQ(0, sala.getNrRanduri());
     EXPECT_EQ(0, sala.getNrColoane());
-    EXPECT_EQ(nullptr, sala.getLocuriOcupate());
+    EXPECT_TRUE(sala.getLocuriOcupate().empty());
 }
 
-TEST(SalaCopyConstructor, CopyConstructor)
+TEST(SalaConstructor, CopyConstructor)
 {
-    Sala sala1(1);
-    bool *locuriOcupate = new bool[63];
-    sala1.setLocuriOcupate(63, locuriOcupate);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala1 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     Sala sala2(sala1);
     EXPECT_EQ(sala1.getIdSala(), sala2.getIdSala());
     EXPECT_EQ(sala1.getNrLocuri(), sala2.getNrLocuri());
-    EXPECT_NE(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
+    EXPECT_EQ(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
 }
 
 TEST(SalaAssignmentOperator, AssignmentOperator)
 {
-    Sala sala1(1);
-    bool *locuriOcupate = new bool[63];
-    sala1.setLocuriOcupate(63, locuriOcupate);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala1 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     Sala sala2;
     sala2 = sala1;
     EXPECT_EQ(sala1.getIdSala(), sala2.getIdSala());
     EXPECT_EQ(sala1.getNrLocuri(), sala2.getNrLocuri());
-    EXPECT_NE(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
+    EXPECT_EQ(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
 }
 
 TEST(SalaSetterGetter, IdSalaSetterGetter)
@@ -259,9 +261,9 @@ TEST(SalaSetterGetter, IdSalaSetterGetter)
 TEST(SalaSetterGetter, LocuriOcupateSetterGetter)
 {
     Sala sala;
-    bool *locuriOcupate = new bool[63];
+    std::vector<bool> locuriOcupate(63, false);
     sala.setLocuriOcupate(63, locuriOcupate);
-    EXPECT_NE(nullptr, sala.getLocuriOcupate());
+    EXPECT_EQ(locuriOcupate, sala.getLocuriOcupate());
 }
 
 TEST(BiletNormalConstructor, ParameterizedConstructor)
@@ -278,6 +280,15 @@ TEST(BiletNormalConstructor, DefaultConstructor)
     EXPECT_EQ(0, bilet.getRand());
     EXPECT_EQ(0, bilet.getColoana());
     EXPECT_EQ(25, bilet.getPret());
+}
+
+TEST(BiletNormalConstructor, CopyConstructor)
+{
+    Bilet_Normal bilet(2, 4);
+    Bilet_Normal copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletNormalSetterGetter, RandSetterGetter)
@@ -298,15 +309,6 @@ TEST(BiletNormalSetterGetter, PretSetterGetter)
 {
     Bilet_Normal bilet;
     EXPECT_EQ(25, bilet.getPret());
-}
-
-TEST(BiletNormalCopyConstructor, CopyConstructor)
-{
-    Bilet_Normal bilet(2, 4);
-    Bilet_Normal copyBilet(bilet);
-    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
-    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
-    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletNormalAssignmentOperator, AssignmentOperator)
@@ -364,6 +366,17 @@ TEST(Bilet4DxConstructor, DefaultConstructor)
     EXPECT_EQ(45, bilet.getPret());
 }
 
+TEST(Bilet4DxConstructor, CopyConstructor)
+{
+    Bilet_4Dx bilet(2, 4, true, false);
+    Bilet_4Dx copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
+    EXPECT_EQ(bilet.getScaunMiscator(), copyBilet.getScaunMiscator());
+    EXPECT_EQ(bilet.getScaunSuflator(), copyBilet.getScaunSuflator());
+}
+
 TEST(Bilet4DxSetterGetter, ScaunMiscatorSetterGetter)
 {
     Bilet_4Dx bilet;
@@ -385,16 +398,6 @@ TEST(Bilet4DxSetterGetter, Pret4DxSetterGetter)
     EXPECT_EQ(50, bilet.getPret());
 }
 
-TEST(Bilet4DxCopyConstructor, CopyConstructor)
-{
-    Bilet_4Dx bilet(2, 4, true, false);
-    Bilet_4Dx copyBilet(bilet);
-    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
-    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
-    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
-    EXPECT_EQ(bilet.getScaunMiscator(), copyBilet.getScaunMiscator());
-    EXPECT_EQ(bilet.getScaunSuflator(), copyBilet.getScaunSuflator());
-}
 
 TEST(Bilet4DxAssignmentOperator, AssignmentOperator)
 {
@@ -435,7 +438,7 @@ TEST(BiletVIPConstructor, ParameterizedConstructorWithPopcornBauturiGratis)
     EXPECT_EQ(60, bilet.getPret());
 }
 
-TEST(Bilet4DxConstructor, ParameterizedConstructorWithoutPopcornBauturiGratis)
+TEST(BiletVIPConstructor, ParameterizedConstructorWithoutPopcornBauturiGratis)
 {
     Bilet_VIP bilet(3, 5);
     EXPECT_EQ(3, bilet.getRand());
@@ -453,6 +456,17 @@ TEST(BiletVIPConstructor, DefaultConstructor)
     EXPECT_TRUE(bilet.getPopcornGratis());
     EXPECT_TRUE(bilet.getBauturiGratis());
     EXPECT_EQ(60, bilet.getPret());
+}
+
+TEST(BiletVIPConstructor, CopyConstructor)
+{
+    Bilet_VIP bilet(2, 3, true, false);
+    Bilet_VIP copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPopcornGratis(), copyBilet.getPopcornGratis());
+    EXPECT_EQ(bilet.getBauturiGratis(), copyBilet.getBauturiGratis());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletVIPSetterGetter, PopcornGratisSetterGetter)
@@ -474,17 +488,6 @@ TEST(BiletVIPSetterGetter, PretVIPSetterGetter)
     Bilet_VIP bilet;
     bilet.setPretVIP(70);
     EXPECT_EQ(70, bilet.getPret());
-}
-
-TEST(BiletVIPCopyConstructor, CopyConstructor)
-{
-    Bilet_VIP bilet(2, 3, true, false);
-    Bilet_VIP copyBilet(bilet);
-    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
-    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
-    EXPECT_EQ(bilet.getPopcornGratis(), copyBilet.getPopcornGratis());
-    EXPECT_EQ(bilet.getBauturiGratis(), copyBilet.getBauturiGratis());
-    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletVIPAssignmentOperator, AssignmentOperator)
