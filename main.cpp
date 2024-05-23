@@ -127,8 +127,10 @@ public:
         std::vector<std::string> ore = {
             "10:30", "12:00", "13:30", "15:00", "16:30", "18:00", "19:30", "21:00"
         };
-        Sala *S1 = new Sala(1);
-        Sala *S2 = new Sala(2);
+        std::vector<bool> locuriOcupate(63, false);
+        SalaBuilder b;
+        Sala S1 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
+        Sala S2 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
         std::vector<Bilet *> bilete;
         for (int i = 0; i < 63; ++i)
         {
@@ -268,20 +270,20 @@ public:
             }
             cod_ora = ore[std::stoi(tasta) - 1];
             std::cout << "Ati selectat " << ore[std::stoi(tasta) - 1] << "\n";
-            id_sala = std::stoi(tasta) % 2;
+            id_sala = std::stoi(tasta) % 2 + 1;
             cod_sala = std::to_string(id_sala);
             if (id_sala == 1)
             {
                 for (int i = 0; i < 63; ++i)
                 {
-                    loc[i] = S1->getLocuriOcupate()[i];
+                    loc[i] = S1.getLocuriOcupate()[i];
                 }
             }
             else
             {
                 for (int i = 0; i < 63; ++i)
                 {
-                    loc[i] = S2->getLocuriOcupate()[i];
+                    loc[i] = S2.getLocuriOcupate()[i];
                 }
             }
             std::cout << "\nLocurile disponibile sunt marcate cu 0, locurile ocupate sunt marcate cu 1.\n";
@@ -888,8 +890,6 @@ public:
         }
     exit:
         std::cout << "\nLa revedere!\n";
-        delete S1;
-        delete S2;
         for (Bilet *bilet : bilete)
         {
             delete bilet;
