@@ -91,3 +91,16 @@ std::ostream &operator<<(std::ostream &out, const Cinema &cinema) {
     out << "\nid: " << cinema.id << " nume mall: " << cinema.numeMall;
     return out;
 }
+
+bool
+operator==(const Cinema &cinema, const Cinema &aux)
+{
+    if (cinema.getId() == aux.getId() and cinema.getNumeMall() == aux.getNumeMall())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
