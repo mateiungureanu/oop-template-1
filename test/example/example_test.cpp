@@ -5,6 +5,7 @@
 #include <Bilet_Normal.h>
 #include <Bilet_4Dx.h>
 #include <Bilet_VIP.h>
+#include "Bilet_Template.h"
 
 TEST(FilmConstructor, ParametrizedConstructor)
 {
@@ -18,6 +19,14 @@ TEST(FilmConstructor, DefaultConstructor)
     Film film;
     EXPECT_EQ(0, film.getRating());
     EXPECT_EQ("", film.getNumeFilm());
+}
+
+TEST(FilmConstructor, CopyConstructor)
+{
+    Film film("FilmName", 7.3);
+    Film copyFilm(film);
+    EXPECT_EQ(film.getNumeFilm(), copyFilm.getNumeFilm());
+    EXPECT_EQ(film.getRating(), copyFilm.getRating());
 }
 
 TEST(FilmSetterGetter, RatingSetterGetter)
@@ -63,8 +72,8 @@ TEST(FilmComparison, LessThanOperator)
 {
     Film film1("Film_Name_1", 8.0);
     Film film2("Film_Name_2", 9.0);
-    EXPECT_TRUE(Film::comparaFilme(film1, film2));
-    EXPECT_FALSE(Film::comparaFilme(film2, film1));
+    EXPECT_TRUE(film1 < film2);
+    EXPECT_FALSE(film2 < film1);
 }
 
 TEST(CinemaConstructor, ParametrizedConstructor)
@@ -73,8 +82,6 @@ TEST(CinemaConstructor, ParametrizedConstructor)
     Cinema cinema(1, "Nume_Mall");
     EXPECT_EQ(1, cinema.getId());
     EXPECT_EQ("Nume_Mall", cinema.getNumeMall());
-    EXPECT_EQ(0, cinema.getNrFilme());
-    EXPECT_EQ(nullptr, cinema.getFilmeDifuzate());
 }
 
 TEST(CinemaConstructor, DefaultConstructor)
@@ -82,8 +89,6 @@ TEST(CinemaConstructor, DefaultConstructor)
     Cinema cinema;
     EXPECT_EQ(0, cinema.getId());
     EXPECT_EQ("", cinema.getNumeMall());
-    EXPECT_EQ(0, cinema.getNrFilme());
-    EXPECT_EQ(nullptr, cinema.getFilmeDifuzate());
 }
 
 TEST(CinemaSetterGetter, IdSetterGetter)
@@ -100,49 +105,49 @@ TEST(CinemaSetterGetter, NumeMallSetterGetter)
     EXPECT_EQ("Mall_Name", cinema.getNumeMall());
 }
 
-TEST(CinemaSetterGetter, NrFilmeSetterGetter)
-{
-    Cinema cinema;
-    cinema.setNrFilme(5);
-    EXPECT_EQ(5, cinema.getNrFilme());
-}
-
 TEST(CinemaSetterGetter, FilmeDifuzateSetterGetter)
 {
     Cinema cinema;
     Film film("Film_Name", 8.0);
-    Film *filmArray = new Film[1];
-    filmArray[0] = film;
-    cinema.setFilmeDifuzate(1, filmArray);
-    EXPECT_EQ(1, cinema.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema.getFilmeDifuzate()[0].getRating());
-    delete[] filmArray;
+    std::set<Film> filmSet;
+    filmSet.insert(film);
+    cinema.setFilmeDifuzate(filmSet);
+    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAddFilm, AdaugaFilm)
 {
     Cinema cinema;
     cinema.adaugaFilm("Film_Name", 8.0);
-    EXPECT_EQ(1, cinema.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name", cinema.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaRemoveFilm, StergeFilm)
 {
     Cinema cinema;
+    std::ostringstream oss;
+    std::streambuf* coutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
     cinema.adaugaFilm("Film_Name", 8.0);
     cinema.stergeFilm("Film_Name");
-    EXPECT_EQ(0, cinema.getNrFilme());
+    std::cout.rdbuf(coutBuffer);
+    EXPECT_EQ("Filmul a fost sters cu succes.\n", oss.str());
+    EXPECT_EQ(0, cinema.getFilmeDifuzate().size());
 }
 
 TEST(CinemaChangeRating, SchimbaRating)
 {
     Cinema cinema;
+    std::ostringstream oss;
+    std::streambuf* coutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(oss.rdbuf());
     cinema.adaugaFilm("Film_Name", 8.0);
-    cinema.schimbaRating("Film_Name", 9.0);
-    EXPECT_EQ(9.0, cinema.getFilmeDifuzate()[0].getRating());
+    cinema.schimbaRating("Film_Name", 8.5);
+    std::cout.rdbuf(coutBuffer);
+    EXPECT_EQ("Rating-ul filmului a fost modificat cu succes.\n", oss.str());
+    EXPECT_EQ(8.5, cinema.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaCopyConstructor, CopyConstructor)
@@ -150,9 +155,8 @@ TEST(CinemaCopyConstructor, CopyConstructor)
     Cinema cinema1;
     cinema1.adaugaFilm("Film_Name", 8.0);
     Cinema cinema2(cinema1);
-    EXPECT_EQ(1, cinema2.getNrFilme());
-    EXPECT_EQ("Film_Name", cinema2.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name", cinema2.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAssignmentOperator, AssignmentOperator)
@@ -161,9 +165,8 @@ TEST(CinemaAssignmentOperator, AssignmentOperator)
     cinema1.adaugaFilm("Film_Name_1", 8.0);
     Cinema cinema2;
     cinema2 = cinema1;
-    EXPECT_EQ(1, cinema2.getNrFilme());
-    EXPECT_EQ("Film_Name_1", cinema2.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate()[0].getRating());
+    EXPECT_EQ("Film_Name_1", cinema2.getFilmeDifuzate().begin()->getNumeFilm());
+    EXPECT_EQ(8.0, cinema2.getFilmeDifuzate().begin()->getRating());
 }
 
 TEST(CinemaAdditionOperator, AdditionOperator)
@@ -174,42 +177,45 @@ TEST(CinemaAdditionOperator, AdditionOperator)
     cinema2.adaugaFilm("Film_Name_1", 8.0);
     cinema2.adaugaFilm("Film_Name_2", 9.0);
     Cinema cinema3 = cinema1 + cinema2;
-    EXPECT_EQ(2, cinema3.getNrFilme());
-    EXPECT_EQ("Film_Name_1", cinema3.getFilmeDifuzate()[0].getNumeFilm());
-    EXPECT_EQ(8.0, cinema3.getFilmeDifuzate()[0].getRating());
-    EXPECT_EQ("Film_Name_2", cinema3.getFilmeDifuzate()[1].getNumeFilm());
-    EXPECT_EQ(9.0, cinema3.getFilmeDifuzate()[1].getRating());
+    const std::set<Film>& filmeDifuzate = cinema3.getFilmeDifuzate();
+    auto it = filmeDifuzate.begin();
+    EXPECT_EQ("Film_Name_1", it->getNumeFilm());
+    EXPECT_EQ(8.0, it->getRating());
+    it++;
+    EXPECT_EQ("Film_Name_2", it->getNumeFilm());
+    EXPECT_EQ(9.0, it->getRating());
 }
 
 TEST(CinemaStreamOperators, InputOperator)
 {
-    std::istringstream input("1 Mall_Name 5");
+    std::istringstream input("1 Mall_Name");
     Cinema cinema;
     input >> cinema;
     EXPECT_EQ(1, cinema.getId());
     EXPECT_EQ("Mall_Name", cinema.getNumeMall());
-    EXPECT_EQ(5, cinema.getNrFilme());
 }
 
 TEST(CinemaStreamOperators, OutputOperator)
 {
     Cinema cinema(1, "Mall_Name");
-    cinema.setNrFilme(5);
+    std::set<Film> filmSet;
+    filmSet.insert(Film("Film_Name", 8.0));
+    cinema.setFilmeDifuzate(filmSet);
     std::ostringstream output;
-    std::streambuf *oldCout = std::cout.rdbuf(output.rdbuf());
-    std::cout << cinema;
-    std::cout.rdbuf(oldCout);
-    EXPECT_EQ("\nid: 1 nume mall: Mall_Name numar sali: 5", output.str());
+    output << cinema;
+    EXPECT_EQ("\nid: 1 nume mall: Mall_Name", output.str());
 }
 
 TEST(SalaConstructor, ParameterizedConstructor)
 {
-    Sala sala(1);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     EXPECT_EQ(1, sala.getIdSala());
     EXPECT_EQ(63, sala.getNrLocuri());
     EXPECT_EQ(9, sala.getNrRanduri());
     EXPECT_EQ(7, sala.getNrColoane());
-    EXPECT_NE(nullptr, sala.getLocuriOcupate());
+    EXPECT_EQ(locuriOcupate, sala.getLocuriOcupate());
 }
 
 TEST(SalaConstructor, DefaultConstructor)
@@ -219,30 +225,30 @@ TEST(SalaConstructor, DefaultConstructor)
     EXPECT_EQ(0, sala.getNrLocuri());
     EXPECT_EQ(0, sala.getNrRanduri());
     EXPECT_EQ(0, sala.getNrColoane());
-    EXPECT_EQ(nullptr, sala.getLocuriOcupate());
+    EXPECT_TRUE(sala.getLocuriOcupate().empty());
 }
 
-TEST(SalaCopyConstructor, CopyConstructor)
+TEST(SalaConstructor, CopyConstructor)
 {
-    Sala sala1(1);
-    bool *locuriOcupate = new bool[63];
-    sala1.setLocuriOcupate(63, locuriOcupate);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala1 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     Sala sala2(sala1);
     EXPECT_EQ(sala1.getIdSala(), sala2.getIdSala());
     EXPECT_EQ(sala1.getNrLocuri(), sala2.getNrLocuri());
-    EXPECT_NE(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
+    EXPECT_EQ(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
 }
 
 TEST(SalaAssignmentOperator, AssignmentOperator)
 {
-    Sala sala1(1);
-    bool *locuriOcupate = new bool[63];
-    sala1.setLocuriOcupate(63, locuriOcupate);
+    std::vector<bool> locuriOcupate(63, false);
+    SalaBuilder b;
+    Sala sala1 = b.setId(1).setNrLocuri(63).setNrRanduri(9).setNrColoane(7).setLocuriOcupate(locuriOcupate).build();
     Sala sala2;
     sala2 = sala1;
     EXPECT_EQ(sala1.getIdSala(), sala2.getIdSala());
     EXPECT_EQ(sala1.getNrLocuri(), sala2.getNrLocuri());
-    EXPECT_NE(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
+    EXPECT_EQ(sala1.getLocuriOcupate(), sala2.getLocuriOcupate());
 }
 
 TEST(SalaSetterGetter, IdSalaSetterGetter)
@@ -255,9 +261,9 @@ TEST(SalaSetterGetter, IdSalaSetterGetter)
 TEST(SalaSetterGetter, LocuriOcupateSetterGetter)
 {
     Sala sala;
-    bool *locuriOcupate = new bool[63];
+    std::vector<bool> locuriOcupate(63, false);
     sala.setLocuriOcupate(63, locuriOcupate);
-    EXPECT_NE(nullptr, sala.getLocuriOcupate());
+    EXPECT_EQ(locuriOcupate, sala.getLocuriOcupate());
 }
 
 TEST(BiletNormalConstructor, ParameterizedConstructor)
@@ -274,6 +280,15 @@ TEST(BiletNormalConstructor, DefaultConstructor)
     EXPECT_EQ(0, bilet.getRand());
     EXPECT_EQ(0, bilet.getColoana());
     EXPECT_EQ(25, bilet.getPret());
+}
+
+TEST(BiletNormalConstructor, CopyConstructor)
+{
+    Bilet_Normal bilet(2, 4);
+    Bilet_Normal copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletNormalSetterGetter, RandSetterGetter)
@@ -296,15 +311,6 @@ TEST(BiletNormalSetterGetter, PretSetterGetter)
     EXPECT_EQ(25, bilet.getPret());
 }
 
-TEST(BiletNormalCopyConstructor, CopyConstructor)
-{
-    Bilet_Normal bilet(2, 4);
-    Bilet_Normal copyBilet(bilet);
-    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
-    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
-    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
-}
-
 TEST(BiletNormalAssignmentOperator, AssignmentOperator)
 {
     Bilet_Normal bilet1(3, 6);
@@ -323,7 +329,7 @@ TEST(BiletNormalGetType, GetTypeFunction)
 
 TEST(BiletNormalDowngradeBilet, DowngradeBiletFunction)
 {
-    Bilet_Normal* biletPtr = Bilet_Normal::downgradeBilet(4, 8);
+    Bilet_Template<int>* biletPtr = Bilet_Template<int>::downgradeBilet(4, 8);
     EXPECT_EQ(4, biletPtr->getRand());
     EXPECT_EQ(8, biletPtr->getColoana());
     EXPECT_EQ(25, biletPtr->getPret());
@@ -360,6 +366,17 @@ TEST(Bilet4DxConstructor, DefaultConstructor)
     EXPECT_EQ(45, bilet.getPret());
 }
 
+TEST(Bilet4DxConstructor, CopyConstructor)
+{
+    Bilet_4Dx bilet(2, 4, true, false);
+    Bilet_4Dx copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
+    EXPECT_EQ(bilet.getScaunMiscator(), copyBilet.getScaunMiscator());
+    EXPECT_EQ(bilet.getScaunSuflator(), copyBilet.getScaunSuflator());
+}
+
 TEST(Bilet4DxSetterGetter, ScaunMiscatorSetterGetter)
 {
     Bilet_4Dx bilet;
@@ -381,16 +398,6 @@ TEST(Bilet4DxSetterGetter, Pret4DxSetterGetter)
     EXPECT_EQ(50, bilet.getPret());
 }
 
-TEST(Bilet4DxCopyConstructor, CopyConstructor)
-{
-    Bilet_4Dx bilet(2, 4, true, false);
-    Bilet_4Dx copyBilet(bilet);
-    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
-    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
-    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
-    EXPECT_EQ(bilet.getScaunMiscator(), copyBilet.getScaunMiscator());
-    EXPECT_EQ(bilet.getScaunSuflator(), copyBilet.getScaunSuflator());
-}
 
 TEST(Bilet4DxAssignmentOperator, AssignmentOperator)
 {
@@ -433,11 +440,11 @@ TEST(BiletVIPConstructor, ParameterizedConstructorWithPopcornBauturiGratis)
 
 TEST(BiletVIPConstructor, ParameterizedConstructorWithoutPopcornBauturiGratis)
 {
-    Bilet_VIP bilet(2, 3, true, false);
-    EXPECT_EQ(2, bilet.getRand());
-    EXPECT_EQ(3, bilet.getColoana());
+    Bilet_VIP bilet(3, 5);
+    EXPECT_EQ(3, bilet.getRand());
+    EXPECT_EQ(5, bilet.getColoana());
     EXPECT_TRUE(bilet.getPopcornGratis());
-    EXPECT_FALSE(bilet.getBauturiGratis());
+    EXPECT_TRUE(bilet.getBauturiGratis());
     EXPECT_EQ(60, bilet.getPret());
 }
 
@@ -449,6 +456,17 @@ TEST(BiletVIPConstructor, DefaultConstructor)
     EXPECT_TRUE(bilet.getPopcornGratis());
     EXPECT_TRUE(bilet.getBauturiGratis());
     EXPECT_EQ(60, bilet.getPret());
+}
+
+TEST(BiletVIPConstructor, CopyConstructor)
+{
+    Bilet_VIP bilet(2, 3, true, false);
+    Bilet_VIP copyBilet(bilet);
+    EXPECT_EQ(bilet.getRand(), copyBilet.getRand());
+    EXPECT_EQ(bilet.getColoana(), copyBilet.getColoana());
+    EXPECT_EQ(bilet.getPopcornGratis(), copyBilet.getPopcornGratis());
+    EXPECT_EQ(bilet.getBauturiGratis(), copyBilet.getBauturiGratis());
+    EXPECT_EQ(bilet.getPret(), copyBilet.getPret());
 }
 
 TEST(BiletVIPSetterGetter, PopcornGratisSetterGetter)
@@ -472,17 +490,6 @@ TEST(BiletVIPSetterGetter, PretVIPSetterGetter)
     EXPECT_EQ(70, bilet.getPret());
 }
 
-TEST(BiletVIPCopyConstructor, CopyConstructor)
-{
-    Bilet_VIP bilet(2, 3, true, false);
-    Bilet_VIP biletCopy(bilet);
-    EXPECT_EQ(bilet.getRand(), biletCopy.getRand());
-    EXPECT_EQ(bilet.getColoana(), biletCopy.getColoana());
-    EXPECT_EQ(bilet.getPopcornGratis(), biletCopy.getPopcornGratis());
-    EXPECT_EQ(bilet.getBauturiGratis(), biletCopy.getBauturiGratis());
-    EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
 TEST(BiletVIPAssignmentOperator, AssignmentOperator)
 {
     Bilet_VIP bilet(2, 3, true, false);
@@ -493,21 +500,4 @@ TEST(BiletVIPAssignmentOperator, AssignmentOperator)
     EXPECT_EQ(bilet.getPopcornGratis(), biletCopy.getPopcornGratis());
     EXPECT_EQ(bilet.getBauturiGratis(), biletCopy.getBauturiGratis());
     EXPECT_EQ(bilet.getPret(), biletCopy.getPret());
-}
-
-TEST(BiletVIPGetType, GetTypeFunction)
-{
-    Bilet_VIP bilet;
-    EXPECT_EQ("VIP", bilet.getType());
-}
-
-TEST(BiletVIPUpgradeBiletVIP, UpgradeBiletVIPFunction)
-{
-    Bilet_VIP* biletPtr = Bilet_VIP::upgradeBiletVIP(4, 8);
-    EXPECT_EQ(4, biletPtr->getRand());
-    EXPECT_EQ(8, biletPtr->getColoana());
-    EXPECT_TRUE(biletPtr->getPopcornGratis());
-    EXPECT_TRUE(biletPtr->getBauturiGratis());
-    EXPECT_EQ(60, biletPtr->getPret());
-    delete biletPtr;
 }

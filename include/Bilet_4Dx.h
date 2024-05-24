@@ -6,7 +6,7 @@
 #include <memory>
 #include "Bilet_Normal.h"
 
-class Bilet_4Dx : public Bilet_Normal
+class Bilet_4Dx : public Bilet_Normal<>
 {
 private:
     bool scaunMiscator;
@@ -30,14 +30,14 @@ public:
     void
     setPret4Dx(int pret4Dx1);
 
-    [[nodiscard]] int
+    [[nodiscard]] bool
     getScaunMiscator() const;
 
-    [[nodiscard]] int
+    [[nodiscard]] bool
     getScaunSuflator() const;
 
     [[nodiscard]] int
-    getPret() override;
+    getPret() const override;
 
     Bilet_4Dx(const Bilet_4Dx &aux);
 
@@ -45,10 +45,10 @@ public:
     operator=(const Bilet_4Dx &aux);
 
     void
-    afiseaza() override;
+    afiseaza() const override;
 
     [[nodiscard]] std::string
-    getType() override;
+    getType() const override;
 
     static Bilet_4Dx *
     upgradeBilet4Dx(int rand1, int coloana1);

@@ -32,20 +32,20 @@ Bilet_4Dx::setPret4Dx(int pret4Dx1)
     this->pret4Dx = pret4Dx1;
 }
 
-[[nodiscard]] int
+[[nodiscard]] bool
 Bilet_4Dx::getScaunMiscator() const
 {
     return scaunMiscator;
 }
 
-[[nodiscard]] int
+[[nodiscard]] bool
 Bilet_4Dx::getScaunSuflator() const
 {
     return scaunSuflator;
 }
 
 [[nodiscard]] int
-Bilet_4Dx::getPret()
+Bilet_4Dx::getPret() const
 {
     return pret4Dx;
 }
@@ -72,9 +72,10 @@ Bilet_4Dx::operator=(const Bilet_4Dx &aux)
 }
 
 void
-Bilet_4Dx::afiseaza()
+Bilet_4Dx::afiseaza() const
 {
     Bilet_Normal::afiseaza();
+    std::cout << " | Pret: " << pret4Dx;
     std::cout << " | Bonus-uri 4Dx:";
     if (scaunMiscator)
     {
@@ -87,7 +88,7 @@ Bilet_4Dx::afiseaza()
 }
 
 [[nodiscard]] std::string
-Bilet_4Dx::getType()
+Bilet_4Dx::getType() const
 {
     return "4Dx";
 }

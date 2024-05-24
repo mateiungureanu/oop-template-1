@@ -9,8 +9,8 @@ class Bilet
 public:
     virtual ~Bilet() = default;
 
-    virtual std::string
-    getType() = 0;
+    [[nodiscard]] virtual std::string
+    getType() const = 0;
 };
 
 #endif

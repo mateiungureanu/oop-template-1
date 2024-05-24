@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <set>
 #include "Film.h"
 
 class Cinema
@@ -10,8 +11,7 @@ class Cinema
 private:
     int id;
     std::string numeMall;
-    Film *filmeDifuzate;
-    int nrFilme;
+    std::set<Film> filmeDifuzate;
 public:
     Cinema(int id, std::string numeMall);
 
@@ -26,10 +26,7 @@ public:
     setNumeMall(std::string numeMall1);
 
     void
-    setNrFilme(int nrFilme1);
-
-    void
-    setFilmeDifuzate(int nrFilme1, const Film *filmeDifuzate1);
+    setFilmeDifuzate(const std::set<Film>& filmeDifuzate1);
 
     [[nodiscard]] int
     getId() const;
@@ -37,10 +34,7 @@ public:
     [[nodiscard]] std::string
     getNumeMall() const;
 
-    [[nodiscard]] int
-    getNrFilme() const;
-
-    [[nodiscard]] Film *
+    [[nodiscard]] const std::set<Film> &
     getFilmeDifuzate() const;
 
     void
@@ -58,7 +52,7 @@ public:
     operator=(const Cinema &aux);
 
     Cinema
-    operator+(Cinema &cinema);
+    operator+(const Cinema &cinema);
 
     friend std::istream &
     operator>>(std::istream &in, Cinema &cinema);

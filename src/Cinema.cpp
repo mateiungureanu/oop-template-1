@@ -1,239 +1,106 @@
 #include "Cinema.h"
 
 #include <algorithm>
+#include <set>
 
-Cinema::Cinema(int id, std::string numeMall) : numeMall(std::move(numeMall))
-{
-    this->id = id;
-    this->nrFilme = 0;
-    this->filmeDifuzate = nullptr;
+Cinema::Cinema(int id, std::string numeMall) : id(id), numeMall(std::move(numeMall)) {}
+
+Cinema::Cinema() : id(0) {}
+
+Cinema::~Cinema() = default;
+
+void Cinema::setId(int id1) {
+    id = id1;
 }
 
-Cinema::Cinema()
-{
-    this->id = 0;
-    this->nrFilme = 0;
-    this->numeMall = "";
-    this->filmeDifuzate = nullptr;
+void Cinema::setNumeMall(std::string numeMall1) {
+    numeMall = std::move(numeMall1);
 }
 
-Cinema::~Cinema()
-{
-    delete[] this->filmeDifuzate;
+void Cinema::setFilmeDifuzate(const std::set<Film>& filmeDifuzate1) {
+    filmeDifuzate = filmeDifuzate1;
 }
 
-void
-Cinema::setId(int id1)
-{
-    this->id = id1;
-}
-
-void
-Cinema::setNumeMall(std::string numeMall1)
-{
-    this->numeMall = std::move(numeMall1);
-}
-
-// cppcheck-suppress unusedFunction
-void Cinema::setNrFilme(int nrFilme1)
-{
-    this->nrFilme = nrFilme1;
-}
-
-void
-Cinema::setFilmeDifuzate(int nrFilme1, const Film *filmeDifuzate1)
-{
-    this->nrFilme = nrFilme1;
-    delete[] this->filmeDifuzate;
-    this->filmeDifuzate = new Film[nrFilme];
-    for (int i = 0; i < nrFilme; i++)
-    {
-        this->filmeDifuzate[i] = filmeDifuzate1[i];
-    }
-}
-
-[[nodiscard]] int
-Cinema::getId() const
-{
+int Cinema::getId() const {
     return id;
 }
 
-[[nodiscard]] std::string
-Cinema::getNumeMall() const
-{
+std::string Cinema::getNumeMall() const {
     return numeMall;
 }
 
-[[nodiscard]] int
-Cinema::getNrFilme() const
-{
-    return nrFilme;
-}
-
-[[nodiscard]] Film *
-Cinema::getFilmeDifuzate() const
-{
+const std::set<Film>& Cinema::getFilmeDifuzate() const {
     return filmeDifuzate;
 }
 
-void
-Cinema::adaugaFilm(const std::string &numeFilm, const double rating)
-{
-    int ok = 1;
-    for (int i = 0; i < nrFilme; i++)
-    {
-        if (filmeDifuzate[i].numeFilm == numeFilm)
-        {
-            ok = 0;
-            break;
-        }
-    }
-    if (ok == 0)
-    {
-        std::cout << "Filmul este deja in lista filmelor difuzate.\n";
-    }
-    else
-    {
-        Film *nouFilmeDifuzate = new Film[nrFilme + 1];
-        for (int i = 0; i < nrFilme; i++)
-        {
-            nouFilmeDifuzate[i] = filmeDifuzate[i];
-        }
-        nouFilmeDifuzate[nrFilme] = Film(numeFilm, rating);
-        nrFilme++;
-        delete[] filmeDifuzate;
-        filmeDifuzate = nouFilmeDifuzate;
-        std::sort(filmeDifuzate, filmeDifuzate + nrFilme, Film::comparaFilme);
-    }
+void Cinema::adaugaFilm(const std::string &numeFilm, double rating) {
+    filmeDifuzate.insert(Film(numeFilm, rating));
 }
 
-void
-Cinema::stergeFilm(const std::string &numeFilm)
-{
-    int index = -1;
-    for (int i = 0; i < nrFilme; i++)
-    {
-        if (filmeDifuzate[i].numeFilm == numeFilm)
-        {
-            index = i;
-            break;
-        }
-    }
-    if (index != -1)
-    {
-        Film *nouFilmeDifuzate = new Film[nrFilme - 1];
-        for (int i = 0; i < index; i++)
-        {
-            nouFilmeDifuzate[i] = filmeDifuzate[i];
-        }
-        for (int i = index; i < nrFilme - 1; i++)
-        {
-            nouFilmeDifuzate[i] = filmeDifuzate[i + 1];
-        }
-        nrFilme--;
-        delete[] filmeDifuzate;
-        filmeDifuzate = nouFilmeDifuzate;
-    }
-    else
-    {
+
+void Cinema::stergeFilm(const std::string &numeFilm) {
+    auto it = std::find_if(filmeDifuzate.begin(), filmeDifuzate.end(),
+                           [&](const Film& film) { return film.getNumeFilm() == numeFilm; });
+    if (it != filmeDifuzate.end()) {
+        filmeDifuzate.erase(it);
+        std::cout << "Filmul a fost sters cu succes.\n";
+    } else {
         std::cout << "Filmul nu exista in lista filmelor difuzate.\n";
     }
 }
 
-void
-Cinema::schimbaRating(const std::string &numeFilm, double nouRating)
-{
-    for (int i = 0; i < nrFilme; ++i)
-    {
-        if (filmeDifuzate[i].numeFilm == numeFilm)
-        {
-            filmeDifuzate[i].rating = nouRating;
-            return;
-        }
-    }
-    std::cout << "Filmul nu exista in lista filmelor difuzate.\n";
-}
-
-Cinema::Cinema(const Cinema &aux) : numeMall(aux.numeMall)
-{
-    this->id = aux.id;
-    this->nrFilme = aux.nrFilme;
-    filmeDifuzate = new Film[aux.nrFilme];
-    for (int i = 0; i < aux.nrFilme; i++)
-    {
-        this->filmeDifuzate[i] = aux.filmeDifuzate[i];
+void Cinema::schimbaRating(const std::string &numeFilm, double nouRating) {
+    auto it = std::find_if(filmeDifuzate.begin(), filmeDifuzate.end(),
+                           [&](const Film& film) { return film.getNumeFilm() == numeFilm; });
+    if (it != filmeDifuzate.end()) {
+        filmeDifuzate.erase(it);
+        filmeDifuzate.insert(Film(numeFilm, nouRating));
+        std::cout << "Rating-ul filmului a fost modificat cu succes.\n";
+    } else {
+        std::cout << "Filmul nu exista in lista filmelor difuzate.\n";
     }
 }
 
-Cinema &
-Cinema::operator=(const Cinema &aux)
-{
-    if (this == &aux)
-    {
+Cinema::Cinema(const Cinema &aux) = default;
+
+Cinema &Cinema::operator=(const Cinema &aux) {
+    if (this == &aux) {
         return *this;
     }
-    this->id = aux.id;
-    this->numeMall = aux.numeMall;
-    this->nrFilme = aux.nrFilme;
-    delete[] filmeDifuzate;
-    this->filmeDifuzate = new Film[nrFilme];
-    for (int i = 0; i < aux.nrFilme; i++)
-    {
-        filmeDifuzate[i] = aux.filmeDifuzate[i];
-    }
+    id = aux.id;
+    numeMall = aux.numeMall;
+    filmeDifuzate = aux.filmeDifuzate;
     return *this;
 }
 
-Cinema
-Cinema::operator+(Cinema &cinema)
-{
-    if (this == &cinema)
-    {
-        return *this;
-    }
+Cinema Cinema::operator+(const Cinema &cinema) {
     Cinema nouCinema;
-    nouCinema.id = this->id;
-    nouCinema.numeMall = this->numeMall;
-    int totalFilme = this->nrFilme + cinema.nrFilme;
-    nouCinema.filmeDifuzate = new Film[totalFilme];
-    for (int i = 0; i < this->nrFilme; i++)
-    {
-        nouCinema.filmeDifuzate[i] = this->filmeDifuzate[i];
-    }
-    int nouFilmeCount = this->nrFilme;
-    for (int i = 0; i < cinema.nrFilme; i++)
-    {
-        bool duplicateFound = false;
-        for (int j = 0; j < nouFilmeCount; j++)
-        {
-            if (nouCinema.filmeDifuzate[j].getNumeFilm() == cinema.filmeDifuzate[i].getNumeFilm()
-                && nouCinema.filmeDifuzate[j].getRating() == cinema.filmeDifuzate[i].getRating())
-            {
-                duplicateFound = true;
-                break;
-            }
-        }
-        if (!duplicateFound)
-        {
-            nouCinema.filmeDifuzate[nouFilmeCount++] = cinema.filmeDifuzate[i];
-        }
-    }
-    nouCinema.nrFilme = nouFilmeCount;
+    nouCinema.id = id;
+    nouCinema.numeMall = numeMall;
+    nouCinema.filmeDifuzate = filmeDifuzate;
+    nouCinema.filmeDifuzate.insert(cinema.filmeDifuzate.begin(), cinema.filmeDifuzate.end());
     return nouCinema;
 }
 
-std::istream &
-operator>>(std::istream &in, Cinema &cinema)
-{
-    in >> cinema.id;
-    in >> cinema.numeMall;
-    in >> cinema.nrFilme;
+std::istream &operator>>(std::istream &in, Cinema &cinema) {
+    in >> cinema.id >> cinema.numeMall;
     return in;
 }
 
-std::ostream &
-operator<<(std::ostream &out, const Cinema &cinema)
-{
-    out << "\nid: " << cinema.id << " nume mall: " << cinema.numeMall << " numar sali: " << cinema.nrFilme;
+std::ostream &operator<<(std::ostream &out, const Cinema &cinema) {
+    out << "\nid: " << cinema.id << " nume mall: " << cinema.numeMall;
     return out;
+}
+
+bool
+operator==(const Cinema &cinema, const Cinema &aux)
+{
+    if (cinema.getId() == aux.getId() and cinema.getNumeMall() == aux.getNumeMall())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

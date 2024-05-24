@@ -6,7 +6,7 @@
 #include <memory>
 #include "Bilet_Normal.h"
 
-class Bilet_VIP : public Bilet_Normal
+class Bilet_VIP : public Bilet_Normal<>
 {
 private:
     bool popcornGratis;
@@ -37,7 +37,7 @@ public:
     getBauturiGratis() const;
 
     [[nodiscard]] int
-    getPret() override;
+    getPret() const override;
 
     Bilet_VIP(const Bilet_VIP &aux);
 
@@ -45,10 +45,10 @@ public:
     operator=(const Bilet_VIP &aux);
 
     void
-    afiseaza() override;
+    afiseaza() const override;
 
     [[nodiscard]] std::string
-    getType() override;
+    getType() const override;
 
     static Bilet_VIP *
     upgradeBiletVIP(int rand1, int coloana1);

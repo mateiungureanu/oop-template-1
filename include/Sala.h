@@ -3,6 +3,8 @@
 
 #include <string>
 #include <iostream>
+#include <utility>
+#include <vector>
 
 class Sala
 {
@@ -11,41 +13,64 @@ private:
     int nrLocuri;
     int nrRanduri;
     int nrColoane;
-    bool *locuriOcupate;
+    std::vector<bool> locuriOcupate;
+
+    friend class SalaBuilder;
+
 public:
     friend class Cinema;
-
-    explicit Sala(int id);
-
     Sala();
+    ~Sala() = default;
+    Sala(const Sala &other) = default;
+    Sala &operator=(const Sala &other);
 
-    ~Sala();
+    void setIdSala(int id1);
+    void setLocuriOcupate(int nrLocuri1, const std::vector<bool> &locuriOcupate1);
 
-    Sala(const Sala &other);
+    [[nodiscard]] int getIdSala() const;
+    [[nodiscard]] int getNrLocuri() const;
+    [[nodiscard]] int getNrRanduri() const;
+    [[nodiscard]] int getNrColoane() const;
+    [[nodiscard]] std::vector<bool> getLocuriOcupate() const;
+};
 
-    Sala &
-    operator=(const Sala &other);
+class SalaBuilder
+{
+private:
+    Sala s;
 
-    void
-    setIdSala(int id1);
+public:
+    SalaBuilder() = default;
+    SalaBuilder &setId(int id)
+    {
+        s.id = id;
+        return *this;
+    }
+    SalaBuilder &setNrLocuri(int nrLocuri)
+    {
+        s.nrLocuri = nrLocuri;
+        return *this;
+    }
+    SalaBuilder &setNrRanduri(int nrRanduri)
+    {
+        s.nrRanduri = nrRanduri;
+        return *this;
+    }
+    SalaBuilder &setNrColoane(int nrColoane)
+    {
+        s.nrColoane = nrColoane;
+        return *this;
+    }
+    SalaBuilder &setLocuriOcupate(const std::vector<bool> &locuriOcupate)
+    {
+        s.locuriOcupate = locuriOcupate;
+        return *this;
+    }
 
-    void
-    setLocuriOcupate(int nrLocuri1, const bool *locuriOcupate1);
-
-    [[nodiscard]] int
-    getIdSala() const;
-
-    [[nodiscard]] int
-    getNrLocuri() const;
-
-    [[nodiscard]] int
-    getNrRanduri() const;
-
-    [[nodiscard]] int
-    getNrColoane() const;
-
-    [[nodiscard]] bool *
-    getLocuriOcupate() const;
+    Sala build()
+    {
+        return s;
+    }
 };
 
 #endif

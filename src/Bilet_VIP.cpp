@@ -45,7 +45,7 @@ Bilet_VIP::getBauturiGratis() const
 }
 
 [[nodiscard]] int
-Bilet_VIP::getPret()
+Bilet_VIP::getPret() const
 {
     return pretVIP;
 }
@@ -72,9 +72,10 @@ Bilet_VIP::operator=(const Bilet_VIP &aux)
 }
 
 void
-Bilet_VIP::afiseaza()
+Bilet_VIP::afiseaza() const
 {
     Bilet_Normal::afiseaza();
+    std::cout << " | Pret: " << pretVIP;
     std::cout << " | Bonus-uri VIP:";
     if (popcornGratis)
     {
@@ -87,7 +88,7 @@ Bilet_VIP::afiseaza()
 }
 
 [[nodiscard]] std::string
-Bilet_VIP::getType()
+Bilet_VIP::getType() const
 {
     return "VIP";
 }
