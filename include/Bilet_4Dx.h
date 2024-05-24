@@ -6,7 +6,7 @@
 #include <memory>
 #include "Bilet_Normal.h"
 
-class Bilet_4Dx : public Bilet_Normal
+class Bilet_4Dx : public Bilet_Normal<>
 {
 private:
     bool scaunMiscator;

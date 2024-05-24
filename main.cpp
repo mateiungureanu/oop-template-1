@@ -331,7 +331,7 @@ public:
                         goto citeste_ora;
                     }
                     nr_bilete--;
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[nr_bilete]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[nr_bilete]);
                     bilet_normal->setRand(0);
                     bilet_normal->setColoana(0);
                     goto citeste_loc;
@@ -352,7 +352,7 @@ public:
                     std::cout << "\nLocul este deja ales de dvs.\n";
                     goto citeste_loc;
                 }
-                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[nr_bilete]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[nr_bilete]);
                 bilet_normal->setRand(x);
                 bilet_normal->setColoana(y);
                 loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 2;
@@ -376,7 +376,7 @@ public:
                     std::cout << i + 1 << "  ";
                     for (int j = 0; j < 9; ++j)
                     {
-                        bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[k]);
+                        bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[k]);
                         if (bilet_normal->getRand() == i + 1 and bilet_normal->getColoana() == j + 1 and k < nr_bilete)
                         {
                             ++k;
@@ -392,7 +392,7 @@ public:
             }
             for (int i = 0; i < nr_bilete; ++i)
             {
-                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                 loc[(bilet_normal->getRand() - 1) * 9 + (bilet_normal->getColoana() - 1)] = 1;
             }
         upgrade_bilet:
@@ -400,7 +400,7 @@ public:
             for (int i = 0; i < nr_bilete; ++i)
             {
                 std::cout << i + 1 << ".";
-                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                 bilet_normal->afiseaza();
                 std::cout << std::endl;
             }
@@ -423,7 +423,7 @@ public:
                 for (int i = 0; i < nr_bilete; ++i)
                 {
                     std::cout << i + 1 << ".";
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     bilet_normal->afiseaza();
                     std::cout << std::endl;
                 }
@@ -444,7 +444,7 @@ public:
                 }
                 if (bilete[index]->getType() == std::string("Normal"))
                 {
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[index]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[index]);
                     bilete[index] = Bilet_4Dx::upgradeBilet4Dx(bilet_normal->getRand(), bilet_normal->getColoana());
                     delete bilet_normal;
                     std::cout << ". Biletul a fost upgradat la 4Dx.\n";
@@ -457,7 +457,7 @@ public:
                 for (int i = 0; i < nr_bilete; ++i)
                 {
                     std::cout << i + 1 << ".";
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     bilet_normal->afiseaza();
                     std::cout << std::endl;
                 }
@@ -540,7 +540,7 @@ public:
                 for (int i = 0; i < nr_bilete; ++i)
                 {
                     std::cout << i + 1 << ".";
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     bilet_normal->afiseaza();
                     std::cout << std::endl;
                 }
@@ -561,7 +561,7 @@ public:
                 }
                 if (bilete[index]->getType() == std::string("Normal"))
                 {
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[index]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[index]);
                     bilete[index] = Bilet_VIP::upgradeBiletVIP(bilet_normal->getRand(), bilet_normal->getColoana());
                     delete bilet_normal;
                     std::cout << ". Biletul a fost upgradat la VIP.\n";
@@ -574,7 +574,7 @@ public:
                 for (int i = 0; i < nr_bilete; ++i)
                 {
                     std::cout << i + 1 << ".";
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     bilet_normal->afiseaza();
                     std::cout << std::endl;
                 }
@@ -657,7 +657,7 @@ public:
                 for (int i = 0; i < nr_bilete; ++i)
                 {
                     std::cout << i + 1 << ".";
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     bilet_normal->afiseaza();
                     std::cout << std::endl;
                 }
@@ -677,7 +677,7 @@ public:
                 if (bilete[index]->getType() == "4Dx")
                 {
                     auto *p4Dx = dynamic_cast<Bilet_4Dx *>(bilete[index]);
-                    bilete[index] = Bilet_Normal::downgradeBilet(p4Dx->getRand(), p4Dx->getColoana());
+                    bilete[index] = Bilet_Normal<int>::downgradeBilet(p4Dx->getRand(), p4Dx->getColoana());
                     delete p4Dx;
                     std::cout << ". Biletul a fost downgradat la Normal.\n";
                     goto upgrade_bilet;
@@ -685,7 +685,7 @@ public:
                 if (bilete[index]->getType() == "VIP")
                 {
                     auto *pVIP = dynamic_cast<Bilet_VIP *>(bilete[index]);
-                    bilete[index] = Bilet_Normal::downgradeBilet(pVIP->getRand(), pVIP->getColoana());
+                    bilete[index] = Bilet_Normal<int>::downgradeBilet(pVIP->getRand(), pVIP->getColoana());
                     delete pVIP;
                     std::cout << ". Biletul a fost downgradat la Normal.\n";
                     goto upgrade_bilet;
@@ -694,7 +694,7 @@ public:
         plata:
             for (int i = 0; i < nr_bilete; ++i)
             {
-                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                 suma += bilet_normal->getPret();
             }
             std::cout << "\nDe platit: " << suma << " lei\nNumarul cardului [16 cifre]: ";
@@ -727,7 +727,7 @@ public:
             }
             if (nr_bilete == 1)
             {
-                auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[0]);
+                auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[0]);
                 std::cout << "\n\nCodul biletului dvs. este: C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O"
                           << cod_ora << "|S" << cod_sala << "|R" << bilet_normal->getRand() << "|C"
                           << bilet_normal->getColoana()
@@ -765,7 +765,7 @@ public:
                 std::cout << "\n\nCodurile biletelor dvs. sunt:\n";
                 for (int i = 0; i < nr_bilete; ++i)
                 {
-                    auto *bilet_normal = dynamic_cast<Bilet_Normal *>(bilete[i]);
+                    auto *bilet_normal = dynamic_cast<Bilet_Normal<int> *>(bilete[i]);
                     std::cout << "C" << cod_cinema << "|F" << cod_film << "|Z" << cod_zi << "|O" << cod_ora << "|S"
                               << cod_sala << "|R" << bilet_normal->getRand() << "|C" << bilet_normal->getColoana() << "|B"
                               << bilet_normal->getType();

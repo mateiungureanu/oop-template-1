@@ -6,7 +6,7 @@
 #include <memory>
 #include "Bilet_Normal.h"
 
-class Bilet_VIP : public Bilet_Normal
+class Bilet_VIP : public Bilet_Normal<>
 {
 private:
     bool popcornGratis;
